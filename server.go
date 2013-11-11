@@ -1,9 +1,9 @@
-package server
+package gourd
 
-import("fmt")
+import (
+	"fmt"
+)
 
 func Start() {
-  fmt.Println("hello world")
+	fmt.Println("hello world")
 }
-
-

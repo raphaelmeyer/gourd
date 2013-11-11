@@ -1,7 +1,8 @@
-package server
+package gourd
 
-import ("testing")
+import (
+	"testing"
+)
 
-func Test_something(t * testing.T) {
+func Test_something(t *testing.T) {
 }
-
