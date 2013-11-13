@@ -17,6 +17,8 @@ func (cucumber * Cucumber) Expect(cond bool) {
 }
 
 func (cucumber * Cucumber) Start() {
+	server := new(WireServer)
+	server.Listen();
 }
 
 func (step * Step) Do(action func(constext * Context)) {

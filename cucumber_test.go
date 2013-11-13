@@ -4,6 +4,7 @@ import (
 	"testing"
 )
 
-func Test_something_else(t *testing.T) {
+func Test_dummy(t *testing.T) {
+	t.Log("Pending")
 }
 
