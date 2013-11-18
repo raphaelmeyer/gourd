@@ -8,9 +8,10 @@ import (
 const DefaultPort string = ":1847"
 
 type WireServer struct {
+	parser Parser
 }
 
-func (*WireServer) Listen() {
+func (server * WireServer) Listen() {
 	listener, err := net.Listen("tcp", DefaultPort)
 	if err != nil {
 		panic(err)
@@ -24,10 +25,12 @@ func (*WireServer) Listen() {
 	reader := bufio.NewReader(conn)
 
 	for {
-		_, err = reader.ReadString('\n')
+		command, err := reader.ReadString('\n')
 		if err != nil {
 			break
 		}
+
+		server.parser.Parse(command)
 	}
 
 	listener.Close()
