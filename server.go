@@ -30,7 +30,11 @@ func (server *WireServer) Listen() {
 			break
 		}
 
-		server.parser.Parse(command)
+		response := server.parser.Parse(command)
+		writer := bufio.NewWriter(conn)
+		_, err = writer.WriteString(response)
+		writer.Flush()
+
 	}
 
 	listener.Close()
