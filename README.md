@@ -6,3 +6,7 @@ gourd
 go wire server
 
 
+## Dependencies
+
+[testify](http://github.com/stretchr/testify)
+
