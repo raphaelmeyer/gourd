@@ -1,79 +1,75 @@
 package gourd
 
 import (
+	"bufio"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 	"net"
 	"testing"
 	"time"
-	"bufio"
 )
 
-func Test_the_wire_server_listens_on_port_1847_and_exits_after_the_connection_is_closed(t *testing.T) {
-	testee := new(WireServer)
-	done := make(chan bool)
-	go func() {
-		testee.Listen()
-		done <- true
-	}()
+func Test_wireserver_accepts_one_connection_on_port_1847(t *testing.T) {
+	testee := &WireServer{}
+	done := start_wireserver(testee)
+
+	// Give the wire server some time to start accepting connection
+	time.Sleep(time.Millisecond)
 
 	conn, err := net.Dial("tcp", "localhost:1847")
-	if err != nil {
-		t.Fatalf("Wire server is not listening: %s", err)
-	}
+	assert.Nil(t, err, "Wire server is not listening.")
 
 	conn.Close()
 
-	select {
-	case <-done:
-	case <-time.After(1000000): // 1s
-		t.Error("Wire server did not exit.")
-	}
+	assert_wireserver_exits(t, done)
 }
 
-type CommandParserMock struct {
-	calls []string
-}
-
-func (parser * CommandParserMock) Parse(command string) {
-	parser.calls = append(parser.calls, command)
-}
-
-func Test_the_wire_server_reads_a_one_line_command_and_sends_it_to_the_command_parser(t *testing.T) {
+func Test_wireserver_reads_and_parses_a_line(t *testing.T) {
 	parser := &CommandParserMock{}
-	testee := WireServer{parser}
-	done := make(chan bool)
-	go func() {
-		testee.Listen()
-		done <- true
-	}()
-
-	conn, err := net.Dial("tcp", "localhost:1847")
-	if err != nil {
-		t.Fatalf("Wire server is not listening: %s", err)
-	}
-
-	writer := bufio.NewWriter(conn)
+	testee := &WireServer{parser}
+	done := start_wireserver(testee)
 
 	command := "[\"begin_scenario\"]\n"
+	parser.On("Parse", command).Return().Once()
+
+	// Give the wire server some time to start accepting connection
+	time.Sleep(time.Millisecond)
+
+	conn, err := net.Dial("tcp", "localhost:1847")
+	assert.Nil(t, err, "Wire server is not listening.")
+
+	writer := bufio.NewWriter(conn)
 	_, err = writer.WriteString(command)
-	if err != nil {
-		t.Fatalf("Failed to send command to wire server: %s", err)
-	}
+	assert.Nil(t, err, "Failed to send command to wire server.")
 
 	writer.Flush()
 	conn.Close()
 
+	assert_wireserver_exits(t, done)
+	parser.Mock.AssertExpectations(t)
+}
+
+func start_wireserver(server *WireServer) chan bool {
+	done := make(chan bool)
+	go func() {
+		server.Listen()
+		done <- true
+	}()
+	return done
+}
+
+func assert_wireserver_exits(t *testing.T, done chan bool) {
 	select {
 	case <-done:
-	case <-time.After(1000000): // 1s
-		t.Error("Wire server did not exit.")
-	}
-
-	if len(parser.calls) != 1 {
-		t.Fatalf("Parse was called %d times, but expected once.", len(parser.calls))
-	}
-
-	if parser.calls[0] != command {
-		t.Fatalf("Called to parse %s, but expected %s", parser.calls[0], command)
+	case <-time.After(1 * time.Second):
+		assert.Fail(t, "Wire server did not exit.")
 	}
 }
 
+type CommandParserMock struct {
+	mock.Mock
+}
+
+func (parser *CommandParserMock) Parse(command string) {
+	parser.Mock.Called(command)
+}

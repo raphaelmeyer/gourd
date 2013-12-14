@@ -11,7 +11,7 @@ type WireServer struct {
 	parser Parser
 }
 
-func (server * WireServer) Listen() {
+func (server *WireServer) Listen() {
 	listener, err := net.Listen("tcp", DefaultPort)
 	if err != nil {
 		panic(err)
