@@ -16,11 +16,13 @@ func (server *WireServer) Listen() {
 	if err != nil {
 		panic(err)
 	}
+	defer listener.Close()
 
 	conn, err := listener.Accept()
 	if err != nil {
 		panic(err)
 	}
+	defer conn.Close()
 
 	reader := bufio.NewReader(conn)
 
@@ -36,7 +38,4 @@ func (server *WireServer) Listen() {
 		writer.Flush()
 
 	}
-
-	listener.Close()
-	conn.Close()
 }
