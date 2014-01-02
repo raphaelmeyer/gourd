@@ -8,6 +8,5 @@ type CommandParser struct {
 }
 
 func (parser *CommandParser) Parse(command string) string {
-	return ""
+	return "[\"fail\",{\"message\":\"Not implemented.\"}]\n"
 }
-

@@ -138,8 +138,8 @@ func assert_wireserver_responds(t *testing.T, conn net.Conn, response string) {
 	}()
 
 	select {
-	case <- done:
-	case <- time.After(1 * time.Second):
+	case <-done:
+	case <-time.After(1 * time.Second):
 		assert.Fail(t, "Wireserver did not respond.")
 	}
 }

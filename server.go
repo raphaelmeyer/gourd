@@ -11,6 +11,11 @@ type WireServer struct {
 	parser Parser
 }
 
+func NewWireServer() *WireServer {
+	parser := new(CommandParser)
+	return &WireServer{parser}
+}
+
 func (server *WireServer) Listen() {
 	listener, err := net.Listen("tcp", DefaultPort)
 	if err != nil {
