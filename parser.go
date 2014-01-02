@@ -7,4 +7,7 @@ type Parser interface {
 type CommandParser struct {
 }
 
+func (parser *CommandParser) Parse(command string) string {
+	return ""
+}
 

@@ -49,6 +49,39 @@ func Test_wireserver_reads_and_parses_a_line(t *testing.T) {
 	parser.Mock.AssertExpectations(t)
 }
 
+func Test_wireserver_reads_and_parses_next_line_after_processing_first_one(t *testing.T) {
+	parser := &CommandParserMock{}
+	testee := &WireServer{parser}
+	done := start_wireserver(testee)
+
+	// Give the wire server some time to start accepting connection
+	time.Sleep(time.Millisecond)
+
+	conn, err := net.Dial("tcp", "localhost:1847")
+	assert.Nil(t, err, "Wireserver is not listening.")
+
+	// First command
+	command := "[\"begin_scenario\"]\n"
+	parser.On("Parse", command).Return("").Once()
+	writer := bufio.NewWriter(conn)
+	_, err = writer.WriteString(command)
+	assert.Nil(t, err, "Failed to send command to wire server.")
+
+	writer.Flush()
+
+	// Next command
+	command = "[\"end_scenario\"]\n"
+	parser.On("Parse", command).Return("").Once()
+	_, err = writer.WriteString(command)
+	assert.Nil(t, err, "Failed to send command to wire server.")
+
+	writer.Flush()
+	conn.Close()
+
+	assert_wireserver_exits(t, done)
+	parser.Mock.AssertExpectations(t)
+}
+
 func Test_wireserver_writes_response_from_parser(t *testing.T) {
 	parser := &CommandParserMock{}
 	testee := &WireServer{parser}

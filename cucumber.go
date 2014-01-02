@@ -17,7 +17,8 @@ func (cucumber * Cucumber) Expect(cond bool) {
 }
 
 func (cucumber * Cucumber) Start() {
-	server := new(WireServer)
+	parser := &CommandParser{}
+	server := &WireServer{parser}
 	server.Listen();
 }
 
