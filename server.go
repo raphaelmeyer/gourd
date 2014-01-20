@@ -3,6 +3,7 @@ package gourd
 import (
 	"bufio"
 	"net"
+	"fmt"
 )
 
 const DefaultPort string = ":1847"
@@ -22,6 +23,7 @@ func (server *WireServer) Listen() {
 		panic(err)
 	}
 	defer listener.Close()
+	fmt.Println("Listening on port", DefaultPort);
 
 	conn, err := listener.Accept()
 	if err != nil {

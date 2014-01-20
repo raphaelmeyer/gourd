@@ -7,6 +7,7 @@ type Parser interface {
 }
 
 type CommandParser struct {
+	step_manager StepManager
 }
 
 func (parser *CommandParser) Parse(command string) string {
