@@ -4,6 +4,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"testing"
+	"fmt"
 )
 
 func Test_parser_returns_success_to_begin_scenario(t *testing.T) {
@@ -37,10 +38,18 @@ func Test_parser_returns_the_id_of_a_defined_step(t *testing.T) {
 	steps := &StepManagerMock{}
 	testee := &CommandParser{steps}
 
-	command := `["step_matches",{"name_to_match":"defined step"}]` + "\n"
+	id := 1
+	pattern := "defined step"
+	steps.On("MatchingStep", pattern).Return(true, id).Once()
+
+	command := `["step_matches",{"name_to_match":"` + pattern + `"}]` + "\n"
 	response := testee.Parse(command)
 
-	assert.Equal(t, response, `["success",[{"id":"1", "args":[]}]]` + "\n")
+	expected_response := fmt.Sprintf(`["success",[{"id":"%d", "args":[]}]]` + "\n", id)
+
+	assert.Equal(t, response, expected_response)
+
+	steps.Mock.AssertExpectations(t)
 }
 
 type StepManagerMock struct {

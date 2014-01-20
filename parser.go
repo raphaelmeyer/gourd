@@ -12,7 +12,14 @@ type CommandParser struct {
 
 func (parser *CommandParser) Parse(command string) string {
 	if strings.Contains(command, `"step_matches"`) {
+		if parser.step_manager != nil {
+			matches, _ := parser.step_manager.MatchingStep("defined step")
+			if matches {
+				return `["success",[{"id":"1", "args":[]}]]` + "\n"
+			}
+		}
 		return `["success",[]]` + "\n"
 	}
 	return `["success"]` + "\n"
 }
+
