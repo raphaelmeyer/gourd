@@ -13,7 +13,7 @@ type WireServer struct {
 }
 
 func NewWireServer() *WireServer {
-	parser := new(CommandParser)
+	parser := NewCommandParser()
 	return &WireServer{parser}
 }
 

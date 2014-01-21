@@ -25,8 +25,15 @@ func Test_parser_returns_success_to_end_scenario(t *testing.T) {
 	assert.Equal(t, response, "[\"success\"]\n")
 }
 
+func TODO_parser_extracts_the_step_pattern(t *testing.T) {
+	assert.Fail(t, "Pending")
+}
+
 func Test_parser_returns_success_and_empty_array_for_undefined_step(t *testing.T) {
-	testee := &CommandParser{}
+	steps := &StepManagerMock{}
+	testee := &CommandParser{steps}
+
+	steps.On("MatchingStep", mock.Anything).Return(false, 0).Once()
 
 	command := `["step_matches",{"name_to_match":"undefined step"}]` + "\n"
 	response := testee.Parse(command)
@@ -56,8 +63,8 @@ type StepManagerMock struct {
 	mock.Mock
 }
 
-func (step_manager *StepManagerMock) MatchingStep(pattern string) (bool, int) {
-	args := step_manager.Mock.Called(pattern)
+func (steps *StepManagerMock) MatchingStep(pattern string) (bool, int) {
+	args := steps.Mock.Called(pattern)
 	return args.Bool(0), args.Int(1)
 }
 

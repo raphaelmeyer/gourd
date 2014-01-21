@@ -7,16 +7,19 @@ type Parser interface {
 }
 
 type CommandParser struct {
-	step_manager StepManager
+	steps IStepManager
+}
+
+func NewCommandParser() *CommandParser {
+	steps := new(StepManager)
+	return &CommandParser{steps}
 }
 
 func (parser *CommandParser) Parse(command string) string {
 	if strings.Contains(command, `"step_matches"`) {
-		if parser.step_manager != nil {
-			matches, _ := parser.step_manager.MatchingStep("defined step")
-			if matches {
-				return `["success",[{"id":"1", "args":[]}]]` + "\n"
-			}
+		matches, _ := parser.steps.MatchingStep("defined step")
+		if matches {
+			return `["success",[{"id":"1", "args":[]}]]` + "\n"
 		}
 		return `["success",[]]` + "\n"
 	}
