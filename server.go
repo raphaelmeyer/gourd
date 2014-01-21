@@ -34,7 +34,7 @@ func (server *WireServer) Listen() {
 	reader := bufio.NewReader(conn)
 
 	for {
-		command, err := reader.ReadString('\n')
+		command, err := reader.ReadBytes('\n')
 		if err != nil {
 			break
 		}

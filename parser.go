@@ -1,9 +1,11 @@
 package gourd
 
-import "strings"
+import (
+	"encoding/json"
+)
 
 type Parser interface {
-	Parse(command string) string
+	Parse(command []byte) string
 }
 
 type CommandParser struct {
@@ -15,9 +17,13 @@ func NewCommandParser() *CommandParser {
 	return &CommandParser{steps}
 }
 
-func (parser *CommandParser) Parse(command string) string {
-	if strings.Contains(command, `"step_matches"`) {
-		matches, _ := parser.steps.MatchingStep("defined step")
+func (parser *CommandParser) Parse(command []byte) string {
+	var data []interface{}
+	_ = json.Unmarshal(command, &data)
+	request := data[0].(string)
+	if (request == "step_matches") {
+		pattern := data[1].(map[string]interface{})["name_to_match"].(string)
+		matches, _ := parser.steps.MatchingStep(pattern)
 		if matches {
 			return `["success",[{"id":"1", "args":[]}]]` + "\n"
 		}

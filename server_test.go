@@ -29,7 +29,7 @@ func Test_wireserver_reads_and_parses_a_line(t *testing.T) {
 	testee := &WireServer{parser}
 	done := start_wireserver(testee)
 
-	command := "[\"begin_scenario\"]\n"
+	command := []byte("[\"begin_scenario\"]\n")
 	parser.On("Parse", command).Return("").Once()
 
 	// Give the wire server some time to start accepting connection
@@ -39,7 +39,7 @@ func Test_wireserver_reads_and_parses_a_line(t *testing.T) {
 	assert.Nil(t, err, "Wireserver is not listening.")
 
 	writer := bufio.NewWriter(conn)
-	_, err = writer.WriteString(command)
+	_, err = writer.Write(command)
 	assert.Nil(t, err, "Failed to send command to wire server.")
 
 	writer.Flush()
@@ -61,18 +61,18 @@ func Test_wireserver_reads_and_parses_next_line_after_processing_first_one(t *te
 	assert.Nil(t, err, "Wireserver is not listening.")
 
 	// First command
-	command := "[\"begin_scenario\"]\n"
+	command := []byte("[\"begin_scenario\"]\n")
 	parser.On("Parse", command).Return("").Once()
 	writer := bufio.NewWriter(conn)
-	_, err = writer.WriteString(command)
+	_, err = writer.Write(command)
 	assert.Nil(t, err, "Failed to send command to wire server.")
 
 	writer.Flush()
 
 	// Next command
-	command = "[\"end_scenario\"]\n"
+	command = []byte("[\"end_scenario\"]\n")
 	parser.On("Parse", command).Return("").Once()
-	_, err = writer.WriteString(command)
+	_, err = writer.Write(command)
 	assert.Nil(t, err, "Failed to send command to wire server.")
 
 	writer.Flush()
@@ -87,7 +87,7 @@ func Test_wireserver_writes_response_from_parser(t *testing.T) {
 	testee := &WireServer{parser}
 	done := start_wireserver(testee)
 
-	command := "[\"begin_scenario\"]\n"
+	command := []byte("[\"begin_scenario\"]\n")
 	response := "[\"success\"]\n"
 	parser.On("Parse", command).Return(response).Once()
 
@@ -98,7 +98,7 @@ func Test_wireserver_writes_response_from_parser(t *testing.T) {
 	assert.Nil(t, err, "Wireserver is not listening.")
 
 	writer := bufio.NewWriter(conn)
-	_, err = writer.WriteString(command)
+	_, err = writer.Write(command)
 	assert.Nil(t, err, "Failed to send command to wire server.")
 	writer.Flush()
 
@@ -148,7 +148,7 @@ type CommandParserMock struct {
 	mock.Mock
 }
 
-func (parser *CommandParserMock) Parse(command string) string {
+func (parser *CommandParserMock) Parse(command []byte) string {
 	args := parser.Mock.Called(command)
 	return args.String(0)
 }
