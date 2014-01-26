@@ -24,8 +24,12 @@ func (parser *CommandParser) Parse(command []byte) string {
 	switch request {
 	case "step_matches":
 		return parser.step_matches(data[1])
+	case "begin_scenario":
+		return `["success"]` + "\n"
+	case "end_scenario":
+		return `["success"]` + "\n"
 	}
-	return `["success"]` + "\n"
+	return `["fail",{"message":"unknown command"}]` + "\n"
 }
 
 func (parser *CommandParser) step_matches(parameters interface{}) string {

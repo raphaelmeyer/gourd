@@ -66,6 +66,16 @@ func Test_parser_returns_the_id_of_a_defined_step(t *testing.T) {
 	steps.Mock.AssertExpectations(t)
 }
 
+func Test_parser_returns_failure_for_unknown_command(t *testing.T) {
+	testee := &CommandParser{}
+
+	command := []byte(`["unknown_command"]` + "\n")
+	response := testee.Parse(command)
+
+	expected_response := `["fail",{"message":"unknown command"}]` + "\n"
+	assert.Equal(t, response, expected_response)
+}
+
 type StepManagerMock struct {
 	mock.Mock
 }
