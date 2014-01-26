@@ -1,10 +1,10 @@
 package gourd
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"testing"
-	"fmt"
 )
 
 func Test_parser_returns_success_to_begin_scenario(t *testing.T) {
@@ -13,7 +13,7 @@ func Test_parser_returns_success_to_begin_scenario(t *testing.T) {
 	command := []byte(`["begin_scenario"]` + "\n")
 	response := testee.Parse(command)
 
-	assert.Equal(t, response, `["success"]` + "\n")
+	assert.Equal(t, response, `["success"]`+"\n")
 }
 
 func Test_parser_returns_success_to_end_scenario(t *testing.T) {
@@ -45,7 +45,7 @@ func Test_parser_returns_success_and_empty_array_for_undefined_step(t *testing.T
 	command := []byte(`["step_matches",{"name_to_match":"undefined step"}]` + "\n")
 	response := testee.Parse(command)
 
-	assert.Equal(t, response, `["success",[]]` + "\n")
+	assert.Equal(t, response, `["success",[]]`+"\n")
 }
 
 func Test_parser_returns_the_id_of_a_defined_step(t *testing.T) {
@@ -59,7 +59,7 @@ func Test_parser_returns_the_id_of_a_defined_step(t *testing.T) {
 	command := []byte(`["step_matches",{"name_to_match":"` + pattern + `"}]` + "\n")
 	response := testee.Parse(command)
 
-	expected_response := fmt.Sprintf(`["success",[{"id":"%d", "args":[]}]]` + "\n", id)
+	expected_response := fmt.Sprintf(`["success",[{"id":"%d", "args":[]}]]`+"\n", id)
 
 	assert.Equal(t, response, expected_response)
 
@@ -74,4 +74,3 @@ func (steps *StepManagerMock) MatchingStep(pattern string) (bool, int) {
 	args := steps.Mock.Called(pattern)
 	return args.Bool(0), args.Int(1)
 }
-

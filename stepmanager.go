@@ -7,7 +7,6 @@ type IStepManager interface {
 type StepManager struct {
 }
 
-func (steps * StepManager) MatchingStep(pattern string) (bool, int) {
+func (steps *StepManager) MatchingStep(pattern string) (bool, int) {
 	return false, 0
 }
-
