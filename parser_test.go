@@ -76,6 +76,16 @@ func Test_parser_returns_failure_for_unknown_command(t *testing.T) {
 	assert.Equal(t, response, expected_response)
 }
 
+func Test_parser_returns_snippet_text(t *testing.T) {
+	testee := &CommandParser{}
+
+	command := []byte(`["snippet_text",{"step_keyword":"Given","multiline_arg_class":"","step_name":"Step"}]` + "\n")
+	response := testee.Parse(command)
+
+	expected_response := `["success","cucumber.Given(\"Step\").Pending()\n"]` + "\n"
+	assert.Equal(t, response, expected_response)
+}
+
 type StepManagerMock struct {
 	mock.Mock
 }

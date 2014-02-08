@@ -28,6 +28,8 @@ func (parser *CommandParser) Parse(command []byte) string {
 		return `["success"]` + "\n"
 	case "end_scenario":
 		return `["success"]` + "\n"
+	case "snippet_text":
+		return `["success","cucumber.Given(\"Step\").Pending()\n"]` + "\n"
 	}
 	return `["fail",{"message":"unknown command"}]` + "\n"
 }
