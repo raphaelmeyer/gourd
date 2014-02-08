@@ -48,11 +48,29 @@ func Test_parser_returns_success_and_empty_array_for_undefined_step(t *testing.T
 	assert.Equal(t, response, `["success",[]]`+"\n")
 }
 
-func Test_parser_returns_the_id_of_a_defined_step(t *testing.T) {
+func Test_parser_returns_success_and_id_for_defined_step(t *testing.T) {
 	steps := &StepManagerMock{}
 	testee := &CommandParser{steps}
 
 	id := 1
+	pattern := "defined step"
+	steps.On("MatchingStep", pattern).Return(true, id).Once()
+
+	command := []byte(`["step_matches",{"name_to_match":"` + pattern + `"}]` + "\n")
+	response := testee.Parse(command)
+
+	expected_response := fmt.Sprintf(`["success",[{"id":"%d", "args":[]}]]`+"\n", id)
+
+	assert.Equal(t, response, expected_response)
+
+	steps.Mock.AssertExpectations(t)
+}
+
+func Test_parser_returns_the_id_of_the_matching_step(t *testing.T) {
+	steps := &StepManagerMock{}
+	testee := &CommandParser{steps}
+
+	id := 5
 	pattern := "defined step"
 	steps.On("MatchingStep", pattern).Return(true, id).Once()
 

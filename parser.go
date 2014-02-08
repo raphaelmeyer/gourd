@@ -2,6 +2,7 @@ package gourd
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
 type Parser interface {
@@ -36,9 +37,9 @@ func (parser *CommandParser) Parse(command []byte) string {
 
 func (parser *CommandParser) step_matches(parameters interface{}) string {
 	pattern := parameters.(map[string]interface{})["name_to_match"].(string)
-	matches, _ := parser.steps.MatchingStep(pattern)
+	matches, id := parser.steps.MatchingStep(pattern)
 	if matches {
-		return `["success",[{"id":"1", "args":[]}]]` + "\n"
+		return fmt.Sprintf(`["success",[{"id":"%d", "args":[]}]]` + "\n", id);
 	}
 	return `["success",[]]` + "\n"
 }
