@@ -108,7 +108,11 @@ type StepManagerMock struct {
 	mock.Mock
 }
 
-func (steps *StepManagerMock) MatchingStep(pattern string) (bool, int) {
-	args := steps.Mock.Called(pattern)
+func (steps *StepManagerMock) MatchingStep(step string) (bool, int) {
+	args := steps.Mock.Called(step)
 	return args.Bool(0), args.Int(1)
+}
+
+func (steps *StepManagerMock) AddStep(pattern string) {
+	steps.Mock.Called(pattern)
 }

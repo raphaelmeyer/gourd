@@ -39,7 +39,7 @@ func (parser *CommandParser) step_matches(parameters interface{}) string {
 	pattern := parameters.(map[string]interface{})["name_to_match"].(string)
 	matches, id := parser.steps.MatchingStep(pattern)
 	if matches {
-		return fmt.Sprintf(`["success",[{"id":"%d", "args":[]}]]` + "\n", id);
+		return fmt.Sprintf(`["success",[{"id":"%d", "args":[]}]]`+"\n", id)
 	}
 	return `["success",[]]` + "\n"
 }
