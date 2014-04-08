@@ -5,20 +5,20 @@ import (
 	"fmt"
 )
 
-type Parser interface {
+type parser interface {
 	parse(command []byte) string
 }
 
-type CommandParser struct {
+type commandParser struct {
 	steps IStepManager
 }
 
-func NewCommandParser() *CommandParser {
+func newCommandParser() *commandParser {
 	steps := new(StepManager)
-	return &CommandParser{steps}
+	return &commandParser{steps}
 }
 
-func (parser *CommandParser) parse(command []byte) string {
+func (parser *commandParser) parse(command []byte) string {
 	var data []interface{}
 	_ = json.Unmarshal(command, &data)
 	request := data[0].(string)
@@ -35,7 +35,7 @@ func (parser *CommandParser) parse(command []byte) string {
 	return `["fail",{"message":"unknown command"}]` + "\n"
 }
 
-func (parser *CommandParser) step_matches(parameters interface{}) string {
+func (parser *commandParser) step_matches(parameters interface{}) string {
 	pattern := parameters.(map[string]interface{})["name_to_match"].(string)
 	matches, id := parser.steps.MatchingStep(pattern)
 	if matches {

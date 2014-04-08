@@ -9,11 +9,11 @@ import (
 const DefaultPort string = ":1847"
 
 type WireServer struct {
-	parser Parser
+	parser parser
 }
 
 func NewWireServer() *WireServer {
-	parser := NewCommandParser()
+	parser := newCommandParser()
 	return &WireServer{parser}
 }
 
