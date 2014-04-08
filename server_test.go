@@ -30,7 +30,7 @@ func Test_wireserver_reads_and_parses_a_line(t *testing.T) {
 	done := start_wireserver(testee)
 
 	command := []byte("[\"begin_scenario\"]\n")
-	parser.On("Parse", command).Return("").Once()
+	parser.On("parse", command).Return("").Once()
 
 	// Give the wire server some time to start accepting connection
 	time.Sleep(time.Millisecond)
@@ -62,7 +62,7 @@ func Test_wireserver_reads_and_parses_next_line_after_processing_first_one(t *te
 
 	// First command
 	command := []byte("[\"begin_scenario\"]\n")
-	parser.On("Parse", command).Return("").Once()
+	parser.On("parse", command).Return("").Once()
 	writer := bufio.NewWriter(conn)
 	_, err = writer.Write(command)
 	assert.Nil(t, err, "Failed to send command to wire server.")
@@ -71,7 +71,7 @@ func Test_wireserver_reads_and_parses_next_line_after_processing_first_one(t *te
 
 	// Next command
 	command = []byte("[\"end_scenario\"]\n")
-	parser.On("Parse", command).Return("").Once()
+	parser.On("parse", command).Return("").Once()
 	_, err = writer.Write(command)
 	assert.Nil(t, err, "Failed to send command to wire server.")
 
@@ -89,7 +89,7 @@ func Test_wireserver_writes_response_from_parser(t *testing.T) {
 
 	command := []byte("[\"begin_scenario\"]\n")
 	response := "[\"success\"]\n"
-	parser.On("Parse", command).Return(response).Once()
+	parser.On("parse", command).Return(response).Once()
 
 	// Give the wire server some time to start accepting connection
 	time.Sleep(time.Millisecond)
@@ -148,7 +148,7 @@ type CommandParserMock struct {
 	mock.Mock
 }
 
-func (parser *CommandParserMock) Parse(command []byte) string {
+func (parser *CommandParserMock) parse(command []byte) string {
 	args := parser.Mock.Called(command)
 	return args.String(0)
 }

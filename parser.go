@@ -6,7 +6,7 @@ import (
 )
 
 type Parser interface {
-	Parse(command []byte) string
+	parse(command []byte) string
 }
 
 type CommandParser struct {
@@ -18,7 +18,7 @@ func NewCommandParser() *CommandParser {
 	return &CommandParser{steps}
 }
 
-func (parser *CommandParser) Parse(command []byte) string {
+func (parser *CommandParser) parse(command []byte) string {
 	var data []interface{}
 	_ = json.Unmarshal(command, &data)
 	request := data[0].(string)

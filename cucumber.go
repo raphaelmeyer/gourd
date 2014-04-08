@@ -13,6 +13,10 @@ func (cucumber *Cucumber) Given(step string) *Step {
 	return new(Step)
 }
 
+func (cucumber *Cucumber) When(step string) *Step {
+	return new(Step)
+}
+
 func (cucumber *Cucumber) Expect(cond bool) {
 }
 
@@ -22,4 +26,7 @@ func (cucumber *Cucumber) Start() {
 }
 
 func (step *Step) Do(action func(constext *Context)) {
+}
+
+func (step *Step) Pending() {
 }

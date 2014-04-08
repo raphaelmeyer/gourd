@@ -39,7 +39,7 @@ func (server *WireServer) Listen() {
 			break
 		}
 
-		response := server.parser.Parse(command)
+		response := server.parser.parse(command)
 		writer := bufio.NewWriter(conn)
 		_, err = writer.WriteString(response)
 		writer.Flush()
