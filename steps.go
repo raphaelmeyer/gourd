@@ -1,16 +1,16 @@
 package gourd
 
-type IStepManager interface {
-	MatchingStep(step string) (bool, int)
-	AddStep(pattern string)
+type steps interface {
+	matchingStep(step string) (bool, int)
+	addStep(pattern string)
 }
 
-type StepManager struct {
+type cucumberSteps struct {
 	steps map[int]string
 	id    int
 }
 
-func (steps *StepManager) MatchingStep(step string) (bool, int) {
+func (steps *cucumberSteps) matchingStep(step string) (bool, int) {
 	for id, pattern := range steps.steps {
 		if step == pattern {
 			return true, id
@@ -19,14 +19,14 @@ func (steps *StepManager) MatchingStep(step string) (bool, int) {
 	return false, 0
 }
 
-func (steps *StepManager) AddStep(pattern string) {
+func (steps *cucumberSteps) addStep(pattern string) {
 	if steps.steps == nil {
 		steps.steps = make(map[int]string)
 	}
 	steps.steps[steps.nextId()] = pattern
 }
 
-func (steps *StepManager) nextId() int {
+func (steps *cucumberSteps) nextId() int {
 	steps.id++
 	return steps.id
 }

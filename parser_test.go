@@ -26,21 +26,21 @@ func Test_parser_returns_success_to_end_scenario(t *testing.T) {
 }
 
 func Test_parser_asks_for_matching_step_with_given_pattern(t *testing.T) {
-	steps := &StepManagerMock{}
+	steps := &stepsMock{}
 	testee := &commandParser{steps}
 
 	pattern := "Given pattern"
-	steps.On("MatchingStep", pattern).Return(false, 0).Once()
+	steps.On("matchingStep", pattern).Return(false, 0).Once()
 
 	command := []byte(`["step_matches",{"name_to_match":"` + pattern + `"}]` + "\n")
 	_ = testee.parse(command)
 }
 
 func Test_parser_returns_success_and_empty_array_for_undefined_step(t *testing.T) {
-	steps := &StepManagerMock{}
+	steps := &stepsMock{}
 	testee := &commandParser{steps}
 
-	steps.On("MatchingStep", mock.Anything).Return(false, 0).Once()
+	steps.On("matchingStep", mock.Anything).Return(false, 0).Once()
 
 	command := []byte(`["step_matches",{"name_to_match":"undefined step"}]` + "\n")
 	response := testee.parse(command)
@@ -49,12 +49,12 @@ func Test_parser_returns_success_and_empty_array_for_undefined_step(t *testing.T
 }
 
 func Test_parser_returns_success_and_id_for_defined_step(t *testing.T) {
-	steps := &StepManagerMock{}
+	steps := &stepsMock{}
 	testee := &commandParser{steps}
 
 	id := 1
 	pattern := "defined step"
-	steps.On("MatchingStep", pattern).Return(true, id).Once()
+	steps.On("matchingStep", pattern).Return(true, id).Once()
 
 	command := []byte(`["step_matches",{"name_to_match":"` + pattern + `"}]` + "\n")
 	response := testee.parse(command)
@@ -67,12 +67,12 @@ func Test_parser_returns_success_and_id_for_defined_step(t *testing.T) {
 }
 
 func Test_parser_returns_the_id_of_the_matching_step(t *testing.T) {
-	steps := &StepManagerMock{}
+	steps := &stepsMock{}
 	testee := &commandParser{steps}
 
 	id := 5
 	pattern := "defined step"
-	steps.On("MatchingStep", pattern).Return(true, id).Once()
+	steps.On("matchingStep", pattern).Return(true, id).Once()
 
 	command := []byte(`["step_matches",{"name_to_match":"` + pattern + `"}]` + "\n")
 	response := testee.parse(command)
@@ -104,15 +104,15 @@ func Test_parser_returns_snippet_text(t *testing.T) {
 	assert.Equal(t, response, expected_response)
 }
 
-type StepManagerMock struct {
+type stepsMock struct {
 	mock.Mock
 }
 
-func (steps *StepManagerMock) MatchingStep(step string) (bool, int) {
+func (steps *stepsMock) matchingStep(step string) (bool, int) {
 	args := steps.Mock.Called(step)
 	return args.Bool(0), args.Int(1)
 }
 
-func (steps *StepManagerMock) AddStep(pattern string) {
+func (steps *stepsMock) addStep(pattern string) {
 	steps.Mock.Called(pattern)
 }

@@ -6,35 +6,35 @@ import (
 )
 
 func Test_returns_false_when_no_matching_step_is_defined(t *testing.T) {
-	testee := &StepManager{}
+	testee := &cucumberSteps{}
 
-	found, _ := testee.MatchingStep("undefined step")
+	found, _ := testee.matchingStep("undefined step")
 	assert.False(t, found)
 }
 
 func Test_matching_a_step_returns_a_positive_id(t *testing.T) {
-	testee := &StepManager{}
+	testee := &cucumberSteps{}
 
 	pattern := "pattern"
-	testee.AddStep(pattern)
+	testee.addStep(pattern)
 
-	found, id := testee.MatchingStep(pattern)
+	found, id := testee.matchingStep(pattern)
 	assert.True(t, found)
 	assert.True(t, 0 < id)
 }
 
 func Test_two_different_steps_return_a_different_id(t *testing.T) {
-	testee := &StepManager{}
+	testee := &cucumberSteps{}
 
 	first_pattern := "a pattern"
 	second_pattern := "another pattern"
-	testee.AddStep(first_pattern)
-	testee.AddStep(second_pattern)
+	testee.addStep(first_pattern)
+	testee.addStep(second_pattern)
 
-	found, first_id := testee.MatchingStep(first_pattern)
+	found, first_id := testee.matchingStep(first_pattern)
 	assert.True(t, found)
 
-	found, second_id := testee.MatchingStep(second_pattern)
+	found, second_id := testee.matchingStep(second_pattern)
 	assert.True(t, found)
 
 	assert.NotEqual(t, first_id, second_id)

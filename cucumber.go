@@ -10,18 +10,18 @@ type Context interface {
 }
 
 func (cucumber *Cucumber) Given(step string) *Step {
-	return new(Step)
+	return &Step{}
 }
 
 func (cucumber *Cucumber) When(step string) *Step {
-	return new(Step)
+	return &Step{}
 }
 
 func (cucumber *Cucumber) Expect(cond bool) {
 }
 
 func (cucumber *Cucumber) Start() {
-	server := NewWireServer()
+	server := newWireServer()
 	server.Listen()
 }
 

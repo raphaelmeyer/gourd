@@ -8,16 +8,16 @@ import (
 
 const DefaultPort string = ":1847"
 
-type WireServer struct {
+type wireServer struct {
 	parser parser
 }
 
-func NewWireServer() *WireServer {
+func newWireServer() *wireServer {
 	parser := newCommandParser()
-	return &WireServer{parser}
+	return &wireServer{parser}
 }
 
-func (server *WireServer) Listen() {
+func (server *wireServer) Listen() {
 	listener, err := net.Listen("tcp", DefaultPort)
 	if err != nil {
 		panic(err)

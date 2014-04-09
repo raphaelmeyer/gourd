@@ -10,8 +10,8 @@ import (
 )
 
 func Test_wireserver_accepts_one_connection_on_port_1847(t *testing.T) {
-	testee := &WireServer{}
-	done := start_wireserver(testee)
+	testee := &wireServer{}
+	done := startWireServer(testee)
 
 	// Give the wire server some time to start accepting connection
 	time.Sleep(time.Millisecond)
@@ -21,13 +21,13 @@ func Test_wireserver_accepts_one_connection_on_port_1847(t *testing.T) {
 
 	conn.Close()
 
-	assert_wireserver_exits(t, done)
+	assertWireServerExits(t, done)
 }
 
 func Test_wireserver_reads_and_parses_a_line(t *testing.T) {
 	parser := &commandParserMock{}
-	testee := &WireServer{parser}
-	done := start_wireserver(testee)
+	testee := &wireServer{parser}
+	done := startWireServer(testee)
 
 	command := []byte("[\"begin_scenario\"]\n")
 	parser.On("parse", command).Return("").Once()
@@ -45,14 +45,14 @@ func Test_wireserver_reads_and_parses_a_line(t *testing.T) {
 	writer.Flush()
 	conn.Close()
 
-	assert_wireserver_exits(t, done)
+	assertWireServerExits(t, done)
 	parser.Mock.AssertExpectations(t)
 }
 
 func Test_wireserver_reads_and_parses_next_line_after_processing_first_one(t *testing.T) {
 	parser := &commandParserMock{}
-	testee := &WireServer{parser}
-	done := start_wireserver(testee)
+	testee := &wireServer{parser}
+	done := startWireServer(testee)
 
 	// Give the wire server some time to start accepting connection
 	time.Sleep(time.Millisecond)
@@ -78,14 +78,14 @@ func Test_wireserver_reads_and_parses_next_line_after_processing_first_one(t *te
 	writer.Flush()
 	conn.Close()
 
-	assert_wireserver_exits(t, done)
+	assertWireServerExits(t, done)
 	parser.Mock.AssertExpectations(t)
 }
 
 func Test_wireserver_writes_response_from_parser(t *testing.T) {
 	parser := &commandParserMock{}
-	testee := &WireServer{parser}
-	done := start_wireserver(testee)
+	testee := &wireServer{parser}
+	done := startWireServer(testee)
 
 	command := []byte("[\"begin_scenario\"]\n")
 	response := "[\"success\"]\n"
@@ -106,11 +106,11 @@ func Test_wireserver_writes_response_from_parser(t *testing.T) {
 
 	conn.Close()
 
-	assert_wireserver_exits(t, done)
+	assertWireServerExits(t, done)
 	parser.Mock.AssertExpectations(t)
 }
 
-func start_wireserver(server *WireServer) chan bool {
+func startWireServer(server *wireServer) chan bool {
 	done := make(chan bool)
 	go func() {
 		server.Listen()
@@ -119,7 +119,7 @@ func start_wireserver(server *WireServer) chan bool {
 	return done
 }
 
-func assert_wireserver_exits(t *testing.T, done chan bool) {
+func assertWireServerExits(t *testing.T, done chan bool) {
 	select {
 	case <-done:
 	case <-time.After(1 * time.Second):
