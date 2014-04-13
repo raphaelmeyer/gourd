@@ -5,17 +5,28 @@ go:
   - 1.1
   - 1.2
 
+env:
+  - RUN_CUCUMBER=true
+  - RUN_CUCUMBER=false
+
+matrix:
+  include:
+    - go: 1.0
+      env: RUN_CUCUMBER=false
+    - go: 1.1
+      env: RUN_CUCUMBER=false
+    - go: 1.2
+      env: RUN_CUCUMBER=true
+
 before_install:
-  - gem install cucumber
+  - [ $RUN_CUCUMBER = true ] && gem install cucumber
 
 install:
   - go get -v ./...
   - go get -v github.com/stretchr/testify
 
-
 after_success:
-  - go run features/steps.go &
-  - sleep 1 && cucumber
+  - [ $RUN_CUCUMBER = true ] && go run features/steps.go & && sleep 1 && cucumber
 
 notifications:
   email:
