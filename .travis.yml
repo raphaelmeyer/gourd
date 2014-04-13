@@ -19,14 +19,14 @@ matrix:
       env: RUN_CUCUMBER=true
 
 before_install:
-  - [ $RUN_CUCUMBER = true ] && gem install cucumber
+  - if [ "$RUN_CUCUMBER" == "true" ] && gem install cucumber
 
 install:
   - go get -v ./...
   - go get -v github.com/stretchr/testify
 
 after_success:
-  - [ $RUN_CUCUMBER = true ] && go run features/steps.go & && sleep 1 && cucumber
+  - if [ "$RUN_CUCUMBER" == "true" ] && go run features/steps.go & && sleep 1 && cucumber
 
 notifications:
   email:
