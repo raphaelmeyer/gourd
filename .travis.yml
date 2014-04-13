@@ -11,7 +11,9 @@ env:
 
 matrix:
   exclude:
-      env: RUN_CUCUMBER=true
+    - env: RUN_CUCUMBER=true
+    - go: 1.2
+      env: RUN_CUCUMBER=false
   include:
     - go: 1.2
       env: RUN_CUCUMBER=true
