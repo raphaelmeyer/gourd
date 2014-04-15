@@ -4,14 +4,24 @@ import (
   "github.com/raphaelmeyer/gourd"
 )
 
+type stepContext struct {
+}
+
 func main() {
   cucumber := &gourd.Cucumber{}
 
-  cucumber.Given(`a scenario with step "arbitrary step"`)
+  cucumber.Given(`a scenario with a step`).Do(
+    func(context interface{}) {
+      _, ok := context.(stepContext)
+      if ok {
+      }
+    })
 
-  cucumber.When(`I run cucumber`)
+  cucumber.Given(`no step implemenation`).Pending()
 
-  cucumber.Then(`it should return step "arbitrary step" is undefined`)
+  cucumber.When(`I run cucumber`).Pending()
+
+  cucumber.Then(`cucumber should indicate that the step is undefined`).Pending()
 
   cucumber.Start();
 }

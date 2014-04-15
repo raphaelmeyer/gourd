@@ -6,9 +6,6 @@ type Cucumber struct {
 type Step struct {
 }
 
-type Context interface {
-}
-
 func (cucumber *Cucumber) Given(step string) *Step {
 	return &Step{}
 }
@@ -29,7 +26,7 @@ func (cucumber *Cucumber) Start() {
 	server.Listen()
 }
 
-func (step *Step) Do(action func(constext *Context)) {
+func (step *Step) Do(action func(context interface{})) {
 }
 
 func (step *Step) Pending() {

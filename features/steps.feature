@@ -1,15 +1,11 @@
-#Feature: Steps
-#  In order to run a feature
-#  As a cucumber
-#  I want to invoke steps
-
 Feature: Steps
   In order to develop behavior driven
   As a go developer
   I want to define steps
 
   Scenario: Undefined step
-    Given a scenario with step "arbitrary step"
+    Given a scenario with a step
+    And no step implementation
     When I run cucumber
-    Then it should return step "arbitrary step" is undefined
+    Then cucumber should indicate that the step is undefined
 
