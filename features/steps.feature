@@ -4,8 +4,7 @@ Feature: Steps
   I want to define steps
 
   Scenario: Undefined step
-    Given a scenario with a step
-    And no step implementation
+    Given a step with no implementation
     When I run cucumber
     Then cucumber should indicate that the step is undefined
 

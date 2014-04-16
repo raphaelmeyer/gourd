@@ -18,7 +18,7 @@ func (cucumber *Cucumber) Then(step string) *Step {
 	return &Step{}
 }
 
-func (cucumber *Cucumber) Expect(cond bool) {
+func (cucumber *Cucumber) Assert(cond bool) {
 }
 
 func (cucumber *Cucumber) Start() {
