@@ -1,37 +1,37 @@
 package main
 
 import (
-  "net"
-  "github.com/raphaelmeyer/gourd"
+	"github.com/raphaelmeyer/gourd"
+	"net"
 )
 
 type stepContext struct {
-  testee gourd.Cucumber
+	testee gourd.Cucumber
 }
 
 func main() {
-  cucumber := &gourd.Cucumber{}
+	cucumber := &gourd.Cucumber{}
 
-  cucumber.Given(`a step with no implementation`).Do(
-    func(context interface{}) {
-      _, ok := context.(stepContext)
-      if ok {
-      }
-    })
+	cucumber.Given("no step implementation").Pass()
 
-  cucumber.When(`I run cucumber`).Do(
-    func(context interface{}) {
-      stepContext, ok := context.(stepContext)
-      if ok {
-        stepContext.testee.Start()
-        conn, err := net.Dial("tcp", "localhost:1847")
-        cucumber.Assert(err == nil)
-        conn.Close()
-      }
-    })
+	cucumber.When("I run cucumber").Do(
+		func(context interface{}) {
+			stepContext, ok := context.(stepContext)
+			if ok {
+				stepContext.testee.Start()
+				conn, err := net.Dial("tcp", "localhost:1847")
+				cucumber.Assert(err == nil)
+				conn.Close()
+			}
+		})
 
-  cucumber.Then(`cucumber should indicate that the step is undefined`).Pending()
+	cucumber.When("a new scenario begins").Pending()
 
-  cucumber.Start();
+	cucumber.When("the scenario has a step").Pending()
+
+	cucumber.Then("the scenario ends").Pending()
+
+	cucumber.Then("reports an undefined step").Pending()
+
+	cucumber.Start()
 }
-

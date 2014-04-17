@@ -30,7 +30,7 @@ func (parser *commandParser) parse(command []byte) string {
 	case "end_scenario":
 		return `["success"]` + "\n"
 	case "snippet_text":
-		return `["success","cucumber.Given(\"Step\").Pending()\n"]` + "\n"
+		return parser.snippet_text(data[1])
 	}
 	return `["fail",{"message":"unknown command"}]` + "\n"
 }
@@ -42,4 +42,11 @@ func (parser *commandParser) step_matches(parameters interface{}) string {
 		return fmt.Sprintf(`["success",[{"id":"%d", "args":[]}]]`+"\n", id)
 	}
 	return `["success",[]]` + "\n"
+}
+
+func (parser *commandParser) snippet_text(parameters interface{}) string {
+	snippet := parameters.(map[string]interface{})
+	name := snippet["step_name"].(string)
+	keyword := snippet["step_keyword"].(string)
+	return `["success","cucumber.` + keyword + `(\"` + name + `\").Pending()\n"]` + "\n"
 }

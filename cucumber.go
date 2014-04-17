@@ -29,5 +29,8 @@ func (cucumber *Cucumber) Start() {
 func (step *Step) Do(action func(context interface{})) {
 }
 
+func (step *Step) Pass() {
+}
+
 func (step *Step) Pending() {
 }
