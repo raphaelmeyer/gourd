@@ -113,16 +113,3 @@ func Test_parser_returns_snippet_text_for_when(t *testing.T) {
 	expected_response := `["success","cucumber.When(\"when step\").Pending()\n"]` + "\n"
 	assert.Equal(t, response, expected_response)
 }
-
-type stepsMock struct {
-	mock.Mock
-}
-
-func (steps *stepsMock) matchingStep(step string) (bool, int) {
-	args := steps.Mock.Called(step)
-	return args.Bool(0), args.Int(1)
-}
-
-func (steps *stepsMock) addStep(pattern string) {
-	steps.Mock.Called(pattern)
-}

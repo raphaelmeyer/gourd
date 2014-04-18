@@ -1,7 +1,6 @@
-TODO list
-=========
+# TODO list
 
-* Adapt visibility: change names to lower case, except for _API methods_.
-* Feature file for usage as a guiding test.
-* Refactor API
+* Rename interface realisations
+* Move Step into its own file
+* Move interfaces into their own files
 

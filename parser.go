@@ -13,11 +13,6 @@ type commandParser struct {
 	steps steps
 }
 
-func newCommandParser() *commandParser {
-	steps := &cucumberSteps{}
-	return &commandParser{steps}
-}
-
 func (parser *commandParser) parse(command []byte) string {
 	var data []interface{}
 	_ = json.Unmarshal(command, &data)

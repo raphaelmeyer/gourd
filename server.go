@@ -6,18 +6,20 @@ import (
 	"net"
 )
 
-const DefaultPort string = ":1847"
+type wire_server interface {
+	listen()
+}
 
-type wireServer struct {
+type gourd_wire_server struct {
 	parser parser
 }
 
-func newWireServer() *wireServer {
-	parser := newCommandParser()
-	return &wireServer{parser}
+func new_wire_server(steps steps) wire_server {
+	parser := &commandParser{steps}
+	return &gourd_wire_server{parser}
 }
 
-func (server *wireServer) Listen() {
+func (server *gourd_wire_server) listen() {
 	listener, err := net.Listen("tcp", DefaultPort)
 	if err != nil {
 		panic(err)
@@ -43,6 +45,5 @@ func (server *wireServer) Listen() {
 		writer := bufio.NewWriter(conn)
 		_, err = writer.WriteString(response)
 		writer.Flush()
-
 	}
 }

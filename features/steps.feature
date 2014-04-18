@@ -9,6 +9,6 @@ Feature: Steps
     When I run cucumber
     And a new scenario begins
     And the scenario has a step
-    Then the scenario ends
-    And reports an undefined step
+    And the scenario ends
+    Then an undefined step is reported
 

@@ -10,7 +10,7 @@ type stepContext struct {
 }
 
 func main() {
-	cucumber := &gourd.Cucumber{}
+	cucumber := gourd.NewCucumber()
 
 	cucumber.Given("no step implementation").Pass()
 
@@ -18,7 +18,7 @@ func main() {
 		func(context interface{}) {
 			stepContext, ok := context.(stepContext)
 			if ok {
-				stepContext.testee.Start()
+				stepContext.testee.Run()
 				conn, err := net.Dial("tcp", "localhost:1847")
 				cucumber.Assert(err == nil)
 				conn.Close()
@@ -29,9 +29,9 @@ func main() {
 
 	cucumber.When("the scenario has a step").Pending()
 
-	cucumber.Then("the scenario ends").Pending()
+	cucumber.When("the scenario ends").Pending()
 
-	cucumber.Then("reports an undefined step").Pending()
+	cucumber.Then("an undefined step is reported").Pending()
 
-	cucumber.Start()
+	cucumber.Run()
 }

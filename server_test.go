@@ -10,7 +10,7 @@ import (
 )
 
 func Test_wireserver_accepts_one_connection_on_port_1847(t *testing.T) {
-	testee := &wireServer{}
+	testee := &gourd_wire_server{}
 	done := startWireServer(testee)
 
 	// Give the wire server some time to start accepting connection
@@ -26,7 +26,7 @@ func Test_wireserver_accepts_one_connection_on_port_1847(t *testing.T) {
 
 func Test_wireserver_reads_and_parses_a_line(t *testing.T) {
 	parser := &commandParserMock{}
-	testee := &wireServer{parser}
+	testee := &gourd_wire_server{parser}
 	done := startWireServer(testee)
 
 	command := []byte("[\"begin_scenario\"]\n")
@@ -51,7 +51,7 @@ func Test_wireserver_reads_and_parses_a_line(t *testing.T) {
 
 func Test_wireserver_reads_and_parses_next_line_after_processing_first_one(t *testing.T) {
 	parser := &commandParserMock{}
-	testee := &wireServer{parser}
+	testee := &gourd_wire_server{parser}
 	done := startWireServer(testee)
 
 	// Give the wire server some time to start accepting connection
@@ -84,7 +84,7 @@ func Test_wireserver_reads_and_parses_next_line_after_processing_first_one(t *te
 
 func Test_wireserver_writes_response_from_parser(t *testing.T) {
 	parser := &commandParserMock{}
-	testee := &wireServer{parser}
+	testee := &gourd_wire_server{parser}
 	done := startWireServer(testee)
 
 	command := []byte("[\"begin_scenario\"]\n")
@@ -110,10 +110,10 @@ func Test_wireserver_writes_response_from_parser(t *testing.T) {
 	parser.Mock.AssertExpectations(t)
 }
 
-func startWireServer(server *wireServer) chan bool {
+func startWireServer(server *gourd_wire_server) chan bool {
 	done := make(chan bool)
 	go func() {
-		server.Listen()
+		server.listen()
 		done <- true
 	}()
 	return done
