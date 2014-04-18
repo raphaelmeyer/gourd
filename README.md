@@ -10,13 +10,6 @@ go wire server
 
 ## Development
 
-### TDD cycle
-
-Run unit tests:
-```
-go test
-```
-
 ### BDD cycle
 
 Run feature scenarios:
@@ -24,6 +17,14 @@ Run feature scenarios:
 go run features/steps.go
 cucumber
 ```
+
+### TDD cycle
+
+Run unit tests:
+```
+go test
+```
+
 ### Format
 
 ```
