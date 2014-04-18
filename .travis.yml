@@ -25,7 +25,8 @@ install:
   - go get -v ./...
   - go get -v github.com/stretchr/testify
 
-after_success:
+script:
+  - go test -v ./...
   - if [ "$RUN_CUCUMBER" == "true" ]; then ( go run features/steps.go & ); ( sleep 1 && cucumber ); fi
 
 notifications:
