@@ -21,7 +21,7 @@ script:
   - if [ "$CUCUMBER" == "true" ]; then ( go run features/steps.go & ); ( sleep 1 && cucumber ); fi
   - if [ "$COVERAGE" == "false" ]; then ( go test -v ./... ); fi
   - if [ "$COVERAGE" == "true" ]; then ( go test -v -covermode=count -coverprofile=gourd.cov ./... ); fi
-  - if [ "$COVERAGE" == "true" ]; then ( "$GOPATH/bin/goveralls" -coverprofile=gourd.cov -service=travis-ci ); fi
+  - if [ "$COVERAGE" == "true" ]; then ( PATH="$PATH:~/gopath/bin" goveralls -coverprofile=gourd.cov -service=travis-ci ); fi
 
 notifications:
   email:
