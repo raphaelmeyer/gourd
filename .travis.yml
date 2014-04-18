@@ -15,7 +15,7 @@ before_install:
 install:
   - go get -v ./...
   - go get -v github.com/stretchr/testify
-  - if [ "$COVERAGE" == "true" ]; then ( go get github.com/mattn/goveralls ); fi
+  - if [ "$COVERAGE" == "true" ]; then ( go get -v github.com/mattn/goveralls ); fi
 
 script:
   - if [ "$CUCUMBER" == "true" ]; then ( go run features/steps.go & ); ( sleep 1 && cucumber ); fi
