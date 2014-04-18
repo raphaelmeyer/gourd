@@ -1,6 +1,7 @@
 # gourd
 
 [![Build Status](https://travis-ci.org/raphaelmeyer/gourd.png)](https://travis-ci.org/raphaelmeyer/gourd)
+[![Coverage Status](https://coveralls.io/repos/raphaelmeyer/gourd/badge.png)](https://coveralls.io/r/raphaelmeyer/gourd)
 
 go wire server
 
