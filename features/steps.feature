@@ -3,6 +3,7 @@ Feature: Steps
   As a go developer
   I want to define steps
 
+  @wip
   Scenario: Undefined step
     Given no step implementation
     When I run cucumber
