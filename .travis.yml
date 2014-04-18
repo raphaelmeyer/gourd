@@ -8,15 +8,18 @@ go:
 env:
   - CUCUMBER=true
   - CUCUMBER=false
+  - COVERAGE=true
+  - COVERAGE=false
 
 matrix:
   exclude:
     - env: CUCUMBER=true
+    - env: COVERAGE=true
     - go: 1.2
-      env: CUCUMBER=false
+      env: CUCUMBER=false COVERAGE=false
   include:
     - go: 1.2
-      env: CUCUMBER=true
+      env: CUCUMBER=true COVERAGE=true
 
 before_install:
   - if [ "$CUCUMBER" == "true" ]; then ( gem install cucumber ); fi
@@ -24,17 +27,16 @@ before_install:
 install:
   - go get -v ./...
   - go get -v github.com/stretchr/testify
-  - if [ "$TRAVIS_GO_VERSION" == "1.2" ]; then ( go get github.com/mattn/goveralls ); fi
+  - if [ "$COVERAGE" == "true" ]; then ( go get github.com/mattn/goveralls ); fi
 
 script:
   - if [ "$CUCUMBER" == "true" ]; then ( go run features/steps.go & ); ( sleep 1 && cucumber ); fi
-  - if [ "$TRAVIS_GO_VERSION" != "1.2" ]; then ( go test -v ./... ); fi
-  - if [ "$TRAVIS_GO_VERSION" == "1.2" ]; then ( go test -v -covermode=count -coverprofile=gourd.cov ./... ); fi
-  - if [ "$TRAVIS_GO_VERSION" == "1.2" ]; then ( goveralls -coverprofile=gourd.cov -service=travis-ci ); fi
+  - if [ "$COVERAGE" == "false" ]; then ( go test -v ./... ); fi
+  - if [ "$COVERAGE" == "true" ]; then ( go test -v -covermode=count -coverprofile=gourd.cov ./... ); fi
+  - if [ "$COVERAGE" == "true" ]; then ( goveralls -coverprofile=gourd.cov -service=travis-ci ); fi
 
 notifications:
   email:
     on_success: change
     on_failure: always
-
 
