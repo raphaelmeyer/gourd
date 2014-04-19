@@ -13,6 +13,7 @@ func (steps *stepsMock) matchingStep(step string) (bool, int) {
 	return args.Bool(0), args.Int(1)
 }
 
-func (steps *stepsMock) addStep(pattern string) {
-	steps.Mock.Called(pattern)
+func (steps *stepsMock) add_step(pattern string) Step {
+	args := steps.Mock.Called(pattern)
+	return args.Get(0).(*gourd_step)
 }

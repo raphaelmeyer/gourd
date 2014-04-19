@@ -16,7 +16,7 @@ func Test_matching_a_step_returns_a_positive_id(t *testing.T) {
 	testee := &cucumberSteps{}
 
 	pattern := "pattern"
-	testee.addStep(pattern)
+	testee.add_step(pattern)
 
 	found, id := testee.matchingStep(pattern)
 	assert.True(t, found)
@@ -28,8 +28,8 @@ func Test_two_different_steps_return_a_different_id(t *testing.T) {
 
 	first_pattern := "a pattern"
 	second_pattern := "another pattern"
-	testee.addStep(first_pattern)
-	testee.addStep(second_pattern)
+	testee.add_step(first_pattern)
+	testee.add_step(second_pattern)
 
 	found, first_id := testee.matchingStep(first_pattern)
 	assert.True(t, found)

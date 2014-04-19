@@ -5,17 +5,18 @@ import (
 	"testing"
 )
 
-func Test_statement_given_adds_a_new_step(t *testing.T) {
+func Test_statement_given_adds_and_returns_a_new_step(t *testing.T) {
 	steps := &stepsMock{}
 	testee := &gourd_cucumber{steps, nil}
 
 	pattern := "arbitrary step pattern"
 
-	steps.On("addStep", pattern).Return(&Step{}).Once()
+	expected := &gourd_step{}
+	steps.On("add_step", pattern).Return(expected).Once()
 
-	step := testee.Given(pattern)
+	actual := testee.Given(pattern)
 
-	assert.NotNil(t, step)
+	assert.Equal(t, expected, actual)
 	steps.Mock.AssertExpectations(t)
 }
 
