@@ -3,7 +3,6 @@ package gourd
 import (
 	"bufio"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 	"net"
 	"testing"
 	"time"
@@ -25,7 +24,7 @@ func Test_wireserver_accepts_one_connection_on_port_1847(t *testing.T) {
 }
 
 func Test_wireserver_reads_and_parses_a_line(t *testing.T) {
-	parser := &commandParserMock{}
+	parser := &parser_mock{}
 	testee := &gourd_wire_server{parser}
 	done := startWireServer(testee)
 
@@ -50,7 +49,7 @@ func Test_wireserver_reads_and_parses_a_line(t *testing.T) {
 }
 
 func Test_wireserver_reads_and_parses_next_line_after_processing_first_one(t *testing.T) {
-	parser := &commandParserMock{}
+	parser := &parser_mock{}
 	testee := &gourd_wire_server{parser}
 	done := startWireServer(testee)
 
@@ -83,7 +82,7 @@ func Test_wireserver_reads_and_parses_next_line_after_processing_first_one(t *te
 }
 
 func Test_wireserver_writes_response_from_parser(t *testing.T) {
-	parser := &commandParserMock{}
+	parser := &parser_mock{}
 	testee := &gourd_wire_server{parser}
 	done := startWireServer(testee)
 
@@ -144,11 +143,3 @@ func assert_wireserver_responds(t *testing.T, conn net.Conn, response string) {
 	}
 }
 
-type commandParserMock struct {
-	mock.Mock
-}
-
-func (parser *commandParserMock) parse(command []byte) string {
-	args := parser.Mock.Called(command)
-	return args.String(0)
-}
