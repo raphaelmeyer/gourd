@@ -11,7 +11,7 @@ type Cucumber interface {
 }
 
 func NewCucumber() Cucumber {
-	steps := &cucumberSteps{}
+	steps := &gourd_steps{}
 	server := new_wire_server(steps)
 	return &gourd_cucumber{steps, server}
 }

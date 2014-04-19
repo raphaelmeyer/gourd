@@ -6,14 +6,14 @@ import (
 )
 
 func Test_returns_false_when_no_matching_step_is_defined(t *testing.T) {
-	testee := &cucumberSteps{}
+	testee := &gourd_steps{}
 
 	found, _ := testee.matching_step("undefined step")
 	assert.False(t, found)
 }
 
 func Test_matching_a_step_returns_a_positive_id(t *testing.T) {
-	testee := &cucumberSteps{}
+	testee := &gourd_steps{}
 
 	pattern := "pattern"
 	testee.add_step(pattern)
@@ -24,7 +24,7 @@ func Test_matching_a_step_returns_a_positive_id(t *testing.T) {
 }
 
 func Test_two_different_steps_return_a_different_id(t *testing.T) {
-	testee := &cucumberSteps{}
+	testee := &gourd_steps{}
 
 	first_pattern := "a pattern"
 	second_pattern := "another pattern"

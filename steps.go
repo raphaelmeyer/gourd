@@ -5,12 +5,12 @@ type steps interface {
 	add_step(pattern string) Step
 }
 
-type cucumberSteps struct {
+type gourd_steps struct {
 	steps map[int]*gourd_step
 	id    int
 }
 
-func (steps *cucumberSteps) matching_step(pattern string) (bool, int) {
+func (steps *gourd_steps) matching_step(pattern string) (bool, int) {
 	for id, step := range steps.steps {
 		if step.pattern == pattern {
 			return true, id
@@ -19,7 +19,7 @@ func (steps *cucumberSteps) matching_step(pattern string) (bool, int) {
 	return false, 0
 }
 
-func (steps *cucumberSteps) add_step(pattern string) Step {
+func (steps *gourd_steps) add_step(pattern string) Step {
 	if steps.steps == nil {
 		steps.steps = make(map[int]*gourd_step)
 	}
@@ -28,7 +28,7 @@ func (steps *cucumberSteps) add_step(pattern string) Step {
 	return step
 }
 
-func (steps *cucumberSteps) nextId() int {
+func (steps *gourd_steps) nextId() int {
 	steps.id++
 	return steps.id
 }
