@@ -1,7 +1,7 @@
 package gourd
 
 type steps interface {
-	matchingStep(step string) (bool, int)
+	matching_step(step string) (bool, int)
 	add_step(pattern string) Step
 }
 
@@ -10,7 +10,7 @@ type cucumberSteps struct {
 	id    int
 }
 
-func (steps *cucumberSteps) matchingStep(pattern string) (bool, int) {
+func (steps *cucumberSteps) matching_step(pattern string) (bool, int) {
 	for id, step := range steps.steps {
 		if step.pattern == pattern {
 			return true, id
