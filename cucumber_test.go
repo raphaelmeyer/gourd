@@ -11,12 +11,11 @@ func Test_statement_given_adds_and_returns_a_new_step(t *testing.T) {
 
 	pattern := "arbitrary step pattern"
 
-	expected := &gourd_step{}
-	steps.On("add_step", pattern).Return(expected).Once()
+	steps.On("add_step", pattern).Return(&gourd_step{}).Once()
 
-	actual := testee.Given(pattern)
+	step := testee.Given(pattern)
 
-	assert.Equal(t, expected, actual)
+	assert.NotNil(t, step)
 	steps.Mock.AssertExpectations(t)
 }
 
