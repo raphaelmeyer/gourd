@@ -9,11 +9,11 @@ type parser interface {
 	parse(command []byte) string
 }
 
-type commandParser struct {
+type wire_protocol_parser struct {
 	steps steps
 }
 
-func (parser *commandParser) parse(command []byte) string {
+func (parser *wire_protocol_parser) parse(command []byte) string {
 	var data []interface{}
 	_ = json.Unmarshal(command, &data)
 	request := data[0].(string)
@@ -30,7 +30,7 @@ func (parser *commandParser) parse(command []byte) string {
 	return `["fail",{"message":"unknown command"}]` + "\n"
 }
 
-func (parser *commandParser) step_matches(parameters interface{}) string {
+func (parser *wire_protocol_parser) step_matches(parameters interface{}) string {
 	pattern := parameters.(map[string]interface{})["name_to_match"].(string)
 	matches, id := parser.steps.matching_step(pattern)
 	if matches {
@@ -39,7 +39,7 @@ func (parser *commandParser) step_matches(parameters interface{}) string {
 	return `["success",[]]` + "\n"
 }
 
-func (parser *commandParser) snippet_text(parameters interface{}) string {
+func (parser *wire_protocol_parser) snippet_text(parameters interface{}) string {
 	snippet := parameters.(map[string]interface{})
 	name := snippet["step_name"].(string)
 	keyword := snippet["step_keyword"].(string)

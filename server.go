@@ -15,7 +15,7 @@ type gourd_wire_server struct {
 }
 
 func new_wire_server(steps steps) wire_server {
-	parser := &commandParser{steps}
+	parser := &wire_protocol_parser{steps}
 	return &gourd_wire_server{parser}
 }
 
