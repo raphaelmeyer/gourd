@@ -26,7 +26,7 @@ func Test_parser_returns_success_to_end_scenario(t *testing.T) {
 }
 
 func Test_parser_asks_for_matching_step_with_given_pattern(t *testing.T) {
-	steps := &stepsMock{}
+	steps := &steps_mock{}
 	testee := &wire_protocol_parser{steps}
 
 	pattern := "Given pattern"
@@ -37,7 +37,7 @@ func Test_parser_asks_for_matching_step_with_given_pattern(t *testing.T) {
 }
 
 func Test_parser_returns_success_and_empty_array_for_undefined_step(t *testing.T) {
-	steps := &stepsMock{}
+	steps := &steps_mock{}
 	testee := &wire_protocol_parser{steps}
 
 	steps.On("matching_step", mock.Anything).Return(false, 0).Once()
@@ -49,7 +49,7 @@ func Test_parser_returns_success_and_empty_array_for_undefined_step(t *testing.T
 }
 
 func Test_parser_returns_success_and_id_for_defined_step(t *testing.T) {
-	steps := &stepsMock{}
+	steps := &steps_mock{}
 	testee := &wire_protocol_parser{steps}
 
 	id := 1
@@ -67,7 +67,7 @@ func Test_parser_returns_success_and_id_for_defined_step(t *testing.T) {
 }
 
 func Test_parser_returns_the_id_of_the_matching_step(t *testing.T) {
-	steps := &stepsMock{}
+	steps := &steps_mock{}
 	testee := &wire_protocol_parser{steps}
 
 	id := 5

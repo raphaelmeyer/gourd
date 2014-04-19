@@ -6,7 +6,7 @@ import (
 )
 
 func Test_statement_given_adds_and_returns_a_new_step(t *testing.T) {
-	steps := &stepsMock{}
+	steps := &steps_mock{}
 	testee := &gourd_cucumber{steps, nil}
 
 	pattern := "arbitrary step pattern"
