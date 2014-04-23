@@ -12,7 +12,7 @@ func Test_returns_false_when_no_matching_step_is_defined(t *testing.T) {
 	assert.False(t, found)
 }
 
-func Test_matching_a_step_returns_a_positive_id(t *testing.T) {
+func Test_matching_a_step_returns_a_non_empty_id(t *testing.T) {
 	testee := &gourd_steps{}
 
 	pattern := "pattern"
@@ -20,7 +20,7 @@ func Test_matching_a_step_returns_a_positive_id(t *testing.T) {
 
 	found, id := testee.matching_step(pattern)
 	assert.True(t, found)
-	assert.True(t, 0 < id)
+	assert.NotEqual(t, id, "")
 }
 
 func Test_two_different_steps_return_a_different_id(t *testing.T) {

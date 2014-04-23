@@ -2,8 +2,6 @@ package gourd
 
 import (
 	"encoding/json"
-	"fmt"
-	"strconv"
 )
 
 type parser interface {
@@ -37,7 +35,7 @@ func (parser *wire_protocol_parser) step_matches(parameters interface{}) string 
 	pattern := parameters.(map[string]interface{})["name_to_match"].(string)
 	matches, id := parser.steps.matching_step(pattern)
 	if matches {
-		return fmt.Sprintf(`["success",[{"id":"%d", "args":[]}]]`+"\n", id)
+		return `["success",[{"id":"` + id + `", "args":[]}]]` + "\n"
 	}
 	return `["success",[]]` + "\n"
 }
@@ -51,8 +49,7 @@ func (parser *wire_protocol_parser) snippet_text(parameters interface{}) string 
 
 func (parser *wire_protocol_parser) invoke(parameters interface{}) string {
 	invoke := parameters.(map[string]interface{})
-	id_string := invoke["id"].(string)
-	id, _ := strconv.Atoi(id_string)
+	id := invoke["id"].(string)
 	parser.steps.invoke_step(id)
 	return `["success"]` + "\n"
 }
