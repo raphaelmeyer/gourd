@@ -18,3 +18,7 @@ func (step *gourd_step) Pass() {
 
 func (step *gourd_step) Pending() {
 }
+
+func (step *gourd_step) is_pending() bool {
+	return true
+}

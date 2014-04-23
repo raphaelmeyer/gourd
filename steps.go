@@ -42,6 +42,12 @@ func (steps *gourd_steps) add_step(pattern string) Step {
 }
 
 func (steps *gourd_steps) invoke_step(id string) step_result {
+	step := steps.steps[id]
+
+	if step.is_pending() {
+		return pending
+	}
+
 	return fail
 }
 

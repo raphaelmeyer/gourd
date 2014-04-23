@@ -39,3 +39,18 @@ func Test_two_different_steps_return_a_different_id(t *testing.T) {
 
 	assert.NotEqual(t, first_id, second_id)
 }
+
+func Test_invoking_a_pending_step_returns_pending(t *testing.T) {
+	testee := &gourd_steps{}
+
+	pattern := "arbitrary step pattern"
+	step := testee.add_step(pattern)
+	step.Pending()
+
+	_, id := testee.matching_step(pattern)
+	result := testee.invoke_step(id)
+
+	assert.Equal(t, result, pending)
+}
+
+// invoke step with unknown id returns fail
