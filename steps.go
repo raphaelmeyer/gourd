@@ -3,6 +3,7 @@ package gourd
 type steps interface {
 	matching_step(step string) (bool, int)
 	add_step(pattern string) Step
+	invoke_step(id int) bool
 }
 
 type gourd_steps struct {
@@ -26,6 +27,10 @@ func (steps *gourd_steps) add_step(pattern string) Step {
 	step := &gourd_step{pattern}
 	steps.steps[steps.nextId()] = step
 	return step
+}
+
+func (steps *gourd_steps) invoke_step(id int) bool {
+	return false
 }
 
 func (steps *gourd_steps) nextId() int {

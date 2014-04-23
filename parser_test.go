@@ -90,7 +90,7 @@ func Test_parser_returns_failure_for_unknown_command(t *testing.T) {
 	command := []byte(`["unknown_command"]` + "\n")
 	response := testee.parse(command)
 
-	expected_response := `["fail",{"message":"unknown command"}]` + "\n"
+	expected_response := `["fail",{"message":"unknown command: unknown_command"}]` + "\n"
 	assert.Equal(t, response, expected_response)
 }
 
@@ -112,4 +112,17 @@ func Test_parser_returns_snippet_text_for_when(t *testing.T) {
 
 	expected_response := `["success","cucumber.When(\"when step\").Pending()\n"]` + "\n"
 	assert.Equal(t, response, expected_response)
+}
+
+func Test_parser_invokes_a_step_with_the_given_id(t *testing.T) {
+	steps := &steps_mock{}
+	testee := &wire_protocol_parser{steps}
+
+	id := 12
+	steps.On("invoke_step", id).Return(true).Once()
+
+	command := []byte(fmt.Sprintf(`["invoke",{"id":"%d","args":[]}]`+"\n", id))
+	_ = testee.parse(command)
+
+	steps.Mock.AssertExpectations(t)
 }

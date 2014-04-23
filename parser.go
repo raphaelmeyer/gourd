@@ -3,6 +3,7 @@ package gourd
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 )
 
 type parser interface {
@@ -26,8 +27,10 @@ func (parser *wire_protocol_parser) parse(command []byte) string {
 		return `["success"]` + "\n"
 	case "snippet_text":
 		return parser.snippet_text(data[1])
+	case "invoke":
+		return parser.invoke(data[1])
 	}
-	return `["fail",{"message":"unknown command"}]` + "\n"
+	return `["fail",{"message":"unknown command: ` + request + `"}]` + "\n"
 }
 
 func (parser *wire_protocol_parser) step_matches(parameters interface{}) string {
@@ -44,4 +47,12 @@ func (parser *wire_protocol_parser) snippet_text(parameters interface{}) string 
 	name := snippet["step_name"].(string)
 	keyword := snippet["step_keyword"].(string)
 	return `["success","cucumber.` + keyword + `(\"` + name + `\").Pending()\n"]` + "\n"
+}
+
+func (parser *wire_protocol_parser) invoke(parameters interface{}) string {
+	invoke := parameters.(map[string]interface{})
+	id_string := invoke["id"].(string)
+	id, _ := strconv.Atoi(id_string)
+	parser.steps.invoke_step(id)
+	return `["success"]` + "\n"
 }

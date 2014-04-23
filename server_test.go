@@ -142,4 +142,3 @@ func assert_wireserver_responds(t *testing.T, conn net.Conn, response string) {
 		assert.Fail(t, "Wireserver did not respond.")
 	}
 }
-
