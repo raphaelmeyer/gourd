@@ -50,6 +50,10 @@ func (parser *wire_protocol_parser) snippet_text(parameters interface{}) string 
 func (parser *wire_protocol_parser) invoke(parameters interface{}) string {
 	invoke := parameters.(map[string]interface{})
 	id := invoke["id"].(string)
-	parser.steps.invoke_step(id)
+	result := parser.steps.invoke_step(id)
+	switch result {
+	case pending:
+		return `["pending"]` + "\n"
+	}
 	return `["success"]` + "\n"
 }

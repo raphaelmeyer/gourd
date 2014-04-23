@@ -4,10 +4,18 @@ import (
 	"fmt"
 )
 
+type step_result int
+
+const (
+	success step_result = iota
+	pending
+	fail
+)
+
 type steps interface {
 	matching_step(step string) (bool, string)
 	add_step(pattern string) Step
-	invoke_step(id string) bool
+	invoke_step(id string) step_result
 }
 
 type gourd_steps struct {
@@ -33,8 +41,8 @@ func (steps *gourd_steps) add_step(pattern string) Step {
 	return step
 }
 
-func (steps *gourd_steps) invoke_step(id string) bool {
-	return false
+func (steps *gourd_steps) invoke_step(id string) step_result {
+	return fail
 }
 
 func (steps *gourd_steps) nextId() string {

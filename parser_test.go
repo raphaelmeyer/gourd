@@ -100,10 +100,28 @@ func Test_parser_invokes_a_step_with_the_given_id(t *testing.T) {
 	testee := &wire_protocol_parser{steps}
 
 	id := "7"
-	steps.On("invoke_step", id).Return(true).Once()
+	steps.On("invoke_step", id).Return(success).Once()
 
 	command := []byte(`["invoke",{"id":"` + id + `","args":[]}]` + "\n")
-	_ = testee.parse(command)
+	response := testee.parse(command)
 
+	expected_response := `["success"]` + "\n"
+
+	steps.Mock.AssertExpectations(t)
+	assert.Equal(t, response, expected_response)
+}
+
+func Test_parser_returns_pending_when_invoking_a_pending_step(t *testing.T) {
+	steps := &steps_mock{}
+	testee := &wire_protocol_parser{steps}
+
+	id := "13"
+	steps.On("invoke_step", id).Return(pending).Once()
+
+	command := []byte(`["invoke",{"id":"` + id + `","args":[]}]` + "\n")
+	response := testee.parse(command)
+
+	expected_response := `["pending"]` + "\n"
+	assert.Equal(t, response, expected_response)
 	steps.Mock.AssertExpectations(t)
 }
