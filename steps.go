@@ -36,7 +36,7 @@ func (steps *gourd_steps) add_step(pattern string) Step {
 	if steps.steps == nil {
 		steps.steps = make(map[string]*gourd_step)
 	}
-	step := &gourd_step{pattern}
+	step := new_step(pattern)
 	steps.steps[steps.nextId()] = step
 	return step
 }

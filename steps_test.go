@@ -53,4 +53,6 @@ func Test_invoking_a_pending_step_returns_pending(t *testing.T) {
 	assert.Equal(t, result, pending)
 }
 
-// invoke step with unknown id returns fail
+func Test_invoking_a_step_with_an_unknown_id_fails(t *testing.T) {
+	t.Skip("pending")
+}
