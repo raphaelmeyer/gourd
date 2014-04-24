@@ -36,7 +36,7 @@ func (steps *gourd_steps) add_step(pattern string) Step {
 	if steps.steps == nil {
 		steps.steps = make(map[string]*gourd_step)
 	}
-	step := new_step(pattern)
+	step := &gourd_step{pattern, nil}
 	steps.steps[steps.nextId()] = step
 	return step
 }
@@ -44,11 +44,11 @@ func (steps *gourd_steps) add_step(pattern string) Step {
 func (steps *gourd_steps) invoke_step(id string) step_result {
 	step := steps.steps[id]
 
-	if step.is_pending() {
+	if step.action == nil {
 		return pending
 	}
 
-	return fail
+	return success
 }
 
 func (steps *gourd_steps) nextId() string {
