@@ -6,7 +6,6 @@ type Cucumber interface {
 	Given(pattern string) Step
 	When(pattern string) Step
 	Then(pattern string) Step
-	Assert(cond bool)
 	Run()
 }
 
@@ -31,9 +30,6 @@ func (cucumber *gourd_cucumber) When(pattern string) Step {
 
 func (cucumber *gourd_cucumber) Then(pattern string) Step {
 	return cucumber.steps.add_step(pattern)
-}
-
-func (cucumber *gourd_cucumber) Assert(cond bool) {
 }
 
 func (cucumber *gourd_cucumber) Run() {

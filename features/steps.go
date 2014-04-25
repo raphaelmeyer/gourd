@@ -20,7 +20,9 @@ func main() {
 			if ok {
 				stepContext.testee.Run()
 				conn, err := net.Dial("tcp", "localhost:1847")
-				cucumber.Assert(err == nil)
+				if err != nil {
+					panic("")
+				}
 				conn.Close()
 			}
 		})
