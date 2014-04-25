@@ -26,7 +26,7 @@ func (cucumber *gourd_cucumber) Given(pattern string) Step {
 }
 
 func (cucumber *gourd_cucumber) When(pattern string) Step {
-	return &gourd_step{}
+	return cucumber.steps.add_step(pattern)
 }
 
 func (cucumber *gourd_cucumber) Then(pattern string) Step {
