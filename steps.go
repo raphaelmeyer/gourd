@@ -42,7 +42,11 @@ func (steps *gourd_steps) add_step(pattern string) Step {
 }
 
 func (steps *gourd_steps) invoke_step(id string) (result step_result) {
-	step := steps.steps[id]
+	step, ok := steps.steps[id]
+	if !ok {
+		return fail
+	}
+
 	if step.action == nil {
 		return pending
 	}
