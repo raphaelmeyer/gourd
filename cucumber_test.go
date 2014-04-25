@@ -33,6 +33,20 @@ func Test_statement_when_adds_and_returns_a_new_step(t *testing.T) {
 	steps.Mock.AssertExpectations(t)
 }
 
+func Test_statement_then_adds_and_returns_a_new_step(t *testing.T) {
+	steps := &steps_mock{}
+	testee := &gourd_cucumber{steps, nil}
+
+	pattern := "arbitrary step pattern"
+
+	steps.On("add_step", pattern).Return(&gourd_step{}).Once()
+
+	step := testee.Then(pattern)
+
+	assert.NotNil(t, step)
+	steps.Mock.AssertExpectations(t)
+}
+
 func Test_run_starts_the_wire_server(t *testing.T) {
 	server := &server_mock{}
 	testee := &gourd_cucumber{nil, server}
