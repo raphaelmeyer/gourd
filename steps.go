@@ -41,12 +41,19 @@ func (steps *gourd_steps) add_step(pattern string) Step {
 	return step
 }
 
-func (steps *gourd_steps) invoke_step(id string) step_result {
+func (steps *gourd_steps) invoke_step(id string) (result step_result) {
 	step := steps.steps[id]
-
 	if step.action == nil {
 		return pending
 	}
+
+	defer func() {
+		if recover() != nil {
+			result = fail
+		}
+	}()
+
+	step.action(nil)
 
 	return success
 }
