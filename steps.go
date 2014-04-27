@@ -15,7 +15,7 @@ const (
 type steps interface {
 	matching_step(step string) (bool, string)
 	add_step(pattern string) Step
-	invoke_step(id string) step_result
+	invoke_step(id string) (step_result, string)
 }
 
 type gourd_steps struct {
@@ -41,25 +41,26 @@ func (steps *gourd_steps) add_step(pattern string) Step {
 	return step
 }
 
-func (steps *gourd_steps) invoke_step(id string) (result step_result) {
+func (steps *gourd_steps) invoke_step(id string) (result step_result, message string) {
 	step, ok := steps.steps[id]
 	if !ok {
-		return fail
+		return fail, ""
 	}
 
 	if step.action == nil {
-		return pending
+		return pending, ""
 	}
 
 	defer func() {
 		if recover() != nil {
 			result = fail
+			message = ""
 		}
 	}()
 
 	step.action(nil)
 
-	return success
+	return success, ""
 }
 
 func (steps *gourd_steps) nextId() string {

@@ -18,7 +18,7 @@ func (steps *steps_mock) add_step(pattern string) Step {
 	return args.Get(0).(*gourd_step)
 }
 
-func (steps *steps_mock) invoke_step(id string) step_result {
+func (steps *steps_mock) invoke_step(id string) (step_result, string) {
 	args := steps.Mock.Called(id)
-	return args.Get(0).(step_result)
+	return args.Get(0).(step_result), args.String(1)
 }

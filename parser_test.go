@@ -100,7 +100,7 @@ func Test_parser_invokes_a_step_with_the_given_id(t *testing.T) {
 	testee := &wire_protocol_parser{steps}
 
 	id := "7"
-	steps.On("invoke_step", id).Return(success).Once()
+	steps.On("invoke_step", id).Return(success, "").Once()
 
 	command := []byte(`["invoke",{"id":"` + id + `","args":[]}]` + "\n")
 	testee.parse(command)
@@ -113,7 +113,7 @@ func Test_parser_returns_pending_when_invoking_a_pending_step(t *testing.T) {
 	testee := &wire_protocol_parser{steps}
 
 	id := "13"
-	steps.On("invoke_step", id).Return(pending).Once()
+	steps.On("invoke_step", id).Return(pending, "").Once()
 
 	command := []byte(`["invoke",{"id":"` + id + `","args":[]}]` + "\n")
 	response := testee.parse(command)
@@ -127,7 +127,7 @@ func Test_parser_returns_success_when_invoking_a_passing_step(t *testing.T) {
 	testee := &wire_protocol_parser{steps}
 
 	id := "37"
-	steps.On("invoke_step", id).Return(success).Once()
+	steps.On("invoke_step", id).Return(success, "").Once()
 
 	command := []byte(`["invoke",{"id":"` + id + `","args":[]}]` + "\n")
 	response := testee.parse(command)
@@ -141,11 +141,26 @@ func Test_parser_returns_fail_when_invoking_a_failing_step(t *testing.T) {
 	testee := &wire_protocol_parser{steps}
 
 	id := "123"
-	steps.On("invoke_step", id).Return(fail).Once()
+	steps.On("invoke_step", id).Return(fail, "").Once()
 
 	command := []byte(`["invoke",{"id":"` + id + `","args":[]}]` + "\n")
 	response := testee.parse(command)
 
 	expected_response := `["fail",{"message":""}]` + "\n"
+	assert.Equal(t, response, expected_response)
+}
+
+func Test_parser_returns_failure_message_of_failing_step(t *testing.T) {
+	steps := &steps_mock{}
+	testee := &wire_protocol_parser{steps}
+
+	id := "4"
+	message := "failure message"
+	steps.On("invoke_step", id).Return(fail, message).Once()
+
+	command := []byte(`["invoke",{"id":"` + id + `","args":[]}]` + "\n")
+	response := testee.parse(command)
+
+	expected_response := `["fail",{"message":"` + message + `"}]` + "\n"
 	assert.Equal(t, response, expected_response)
 }
