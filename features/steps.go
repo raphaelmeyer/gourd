@@ -24,6 +24,8 @@ func main() {
 					panic("")
 				}
 				conn.Close()
+			} else {
+				panic("")
 			}
 		})
 

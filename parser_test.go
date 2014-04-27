@@ -135,3 +135,17 @@ func Test_parser_returns_success_when_invoking_a_passing_step(t *testing.T) {
 	expected_response := `["success"]` + "\n"
 	assert.Equal(t, response, expected_response)
 }
+
+func Test_parser_returns_fail_when_invoking_a_failing_step(t *testing.T) {
+	steps := &steps_mock{}
+	testee := &wire_protocol_parser{steps}
+
+	id := "123"
+	steps.On("invoke_step", id).Return(fail).Once()
+
+	command := []byte(`["invoke",{"id":"` + id + `","args":[]}]` + "\n")
+	response := testee.parse(command)
+
+	expected_response := `["fail",{"message":""}]` + "\n"
+	assert.Equal(t, response, expected_response)
+}
