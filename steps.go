@@ -13,7 +13,7 @@ const (
 )
 
 type steps interface {
-	matching_step(step string) (bool, string)
+	matching_step(step string) (string, bool)
 	add_step(pattern string) Step
 	invoke_step(id string) (step_result, string)
 }
@@ -23,13 +23,13 @@ type gourd_steps struct {
 	id    int
 }
 
-func (steps *gourd_steps) matching_step(pattern string) (bool, string) {
+func (steps *gourd_steps) matching_step(pattern string) (string, bool) {
 	for id, step := range steps.steps {
 		if step.pattern == pattern {
-			return true, id
+			return id, true
 		}
 	}
-	return false, ""
+	return "", false
 }
 
 func (steps *gourd_steps) add_step(pattern string) Step {

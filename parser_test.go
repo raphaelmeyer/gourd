@@ -29,7 +29,7 @@ func Test_parser_asks_for_matching_step_with_given_pattern(t *testing.T) {
 	testee := &wire_protocol_parser{steps}
 
 	pattern := "Given pattern"
-	steps.On("matching_step", pattern).Return(false, "").Once()
+	steps.On("matching_step", pattern).Return("", false).Once()
 
 	command := []byte(`["step_matches",{"name_to_match":"` + pattern + `"}]` + "\n")
 	_ = testee.parse(command)
@@ -39,7 +39,7 @@ func Test_parser_returns_success_and_empty_array_for_undefined_step(t *testing.T
 	steps := &steps_mock{}
 	testee := &wire_protocol_parser{steps}
 
-	steps.On("matching_step", mock.Anything).Return(false, "").Once()
+	steps.On("matching_step", mock.Anything).Return("", false).Once()
 
 	command := []byte(`["step_matches",{"name_to_match":"undefined step"}]` + "\n")
 	response := testee.parse(command)
@@ -53,7 +53,7 @@ func Test_parser_returns_success_and_id_for_defined_step(t *testing.T) {
 
 	id := "123"
 	pattern := "defined step"
-	steps.On("matching_step", pattern).Return(true, id).Once()
+	steps.On("matching_step", pattern).Return(id, true).Once()
 
 	command := []byte(`["step_matches",{"name_to_match":"` + pattern + `"}]` + "\n")
 	response := testee.parse(command)

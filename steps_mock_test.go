@@ -8,9 +8,9 @@ type steps_mock struct {
 	mock.Mock
 }
 
-func (steps *steps_mock) matching_step(step string) (bool, string) {
+func (steps *steps_mock) matching_step(step string) (string, bool) {
 	args := steps.Mock.Called(step)
-	return args.Bool(0), args.String(1)
+	return args.String(0), args.Bool(1)
 }
 
 func (steps *steps_mock) add_step(pattern string) Step {
