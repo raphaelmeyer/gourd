@@ -58,7 +58,7 @@ func Test_parser_returns_success_and_id_for_defined_step(t *testing.T) {
 	command := []byte(`["step_matches",{"name_to_match":"` + pattern + `"}]` + "\n")
 	response := testee.parse(command)
 
-	expected_response := `["success",[{"id":"` + id + `", "args":[]}]]` + "\n"
+	expected_response := `["success",[{"id":"` + id + `","args":[]}]]` + "\n"
 
 	assert.Equal(t, response, expected_response)
 
@@ -81,7 +81,7 @@ func Test_parser_returns_snippet_text_for_given(t *testing.T) {
 	command := []byte(`["snippet_text",{"step_keyword":"Given","multiline_arg_class":"","step_name":"Step"}]` + "\n")
 	response := testee.parse(command)
 
-	expected_response := `["success","cucumber.Given(\"Step\").Pending()\n"]` + "\n"
+	expected_response := `["success","cucumber.Given(\"Step\").Pending()"]` + "\n"
 	assert.Equal(t, response, expected_response)
 }
 
@@ -91,7 +91,7 @@ func Test_parser_returns_snippet_text_for_when(t *testing.T) {
 	command := []byte(`["snippet_text",{"step_keyword":"When","multiline_arg_class":"","step_name":"when step"}]` + "\n")
 	response := testee.parse(command)
 
-	expected_response := `["success","cucumber.When(\"when step\").Pending()\n"]` + "\n"
+	expected_response := `["success","cucumber.When(\"when step\").Pending()"]` + "\n"
 	assert.Equal(t, response, expected_response)
 }
 

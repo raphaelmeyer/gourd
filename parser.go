@@ -35,7 +35,7 @@ func (parser *wire_protocol_parser) step_matches(parameters interface{}) string 
 	pattern := parameters.(map[string]interface{})["name_to_match"].(string)
 	id, matches := parser.steps.matching_step(pattern)
 	if matches {
-		return `["success",[{"id":"` + id + `", "args":[]}]]` + "\n"
+		return `["success",[{"id":"` + id + `","args":[]}]]` + "\n"
 	}
 	return `["success",[]]` + "\n"
 }
@@ -44,7 +44,7 @@ func (parser *wire_protocol_parser) snippet_text(parameters interface{}) string 
 	snippet := parameters.(map[string]interface{})
 	name := snippet["step_name"].(string)
 	keyword := snippet["step_keyword"].(string)
-	return `["success","cucumber.` + keyword + `(\"` + name + `\").Pending()\n"]` + "\n"
+	return `["success","cucumber.` + keyword + `(\"` + name + `\").Pending()"]` + "\n"
 }
 
 func (parser *wire_protocol_parser) invoke(parameters interface{}) string {
