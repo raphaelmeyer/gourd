@@ -164,3 +164,7 @@ func Test_parser_returns_failure_message_of_failing_step(t *testing.T) {
 	expected_response := `["fail",{"message":"` + message + `"}]` + "\n"
 	assert.Equal(t, response, expected_response)
 }
+
+func Test_parser_returns_fail_when_the_command_is_malformed(t *testing.T) {
+	t.Log("pending")
+}
