@@ -165,6 +165,12 @@ func Test_parser_returns_failure_message_of_failing_step(t *testing.T) {
 	assert.Equal(t, response, expected_response)
 }
 
-func Test_parser_returns_fail_when_the_command_is_malformed(t *testing.T) {
-	t.Log("pending")
+func Test_parser_returns_fail_when_the_command_is_malformed_json(t *testing.T) {
+	testee := &wire_protocol_parser{}
+
+	command := []byte(`[}"this is not valid json"` + "\n")
+	response := testee.parse(command)
+
+	expected_response := `["fail",{"message":"invalid command"}]` + "\n"
+	assert.Equal(t, response, expected_response)
 }

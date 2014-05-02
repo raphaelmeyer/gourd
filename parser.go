@@ -14,7 +14,10 @@ type wire_protocol_parser struct {
 
 func (parser *wire_protocol_parser) parse(command []byte) string {
 	var data []interface{}
-	_ = json.Unmarshal(command, &data)
+	err := json.Unmarshal(command, &data)
+	if err != nil {
+		return `["fail",{"message":"invalid command"}]` + "\n"
+	}
 
 	return parser.evaluate(data) + "\n"
 }
