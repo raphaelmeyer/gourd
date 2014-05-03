@@ -16,10 +16,10 @@ func (parser *wire_protocol_parser) parse(command []byte) string {
 	var data []interface{}
 	err := json.Unmarshal(command, &data)
 	if err != nil {
-		return `["fail",{"message":"invalid command"}]` + "\n"
+		return `["fail",{"message":"invalid command"}]`
 	}
 
-	return parser.evaluate(data) + "\n"
+	return parser.evaluate(data)
 }
 
 func (parser *wire_protocol_parser) evaluate(command []interface{}) string {

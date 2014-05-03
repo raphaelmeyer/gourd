@@ -33,17 +33,13 @@ func (server *gourd_wire_server) listen() {
 	}
 	defer conn.Close()
 
-	reader := bufio.NewReader(conn)
-
-	for {
-		command, err := reader.ReadBytes('\n')
-		if err != nil {
-			break
-		}
+	scanner := bufio.NewScanner(conn)
+	for scanner.Scan() {
+		command := scanner.Bytes()
 
 		response := server.parser.parse(command)
 		writer := bufio.NewWriter(conn)
-		_, err = writer.WriteString(response)
+		writer.WriteString(response + "\n")
 		writer.Flush()
 	}
 }

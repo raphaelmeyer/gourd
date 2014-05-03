@@ -3,6 +3,7 @@ package gourd
 import (
 	"bufio"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 	"net"
 	"testing"
 	"time"
@@ -23,19 +24,21 @@ func Test_wireserver_accepts_one_connection_on_port_1847(t *testing.T) {
 	assertWireServerExits(t, done)
 }
 
-func Test_wireserver_reads_and_parses_a_line(t *testing.T) {
+func Test_wireserver_forwards_commands_to_parser_without_newlines(t *testing.T) {
 	parser := &parser_mock{}
 	testee := &gourd_wire_server{parser}
 	done := startWireServer(testee)
 
-	command := []byte("[\"begin_scenario\"]\n")
-	parser.On("parse", command).Return("").Once()
+	expected_command := []byte(`["begin_scenario"]`)
+	parser.On("parse", expected_command).Return("").Once()
 
 	// Give the wire server some time to start accepting connection
 	time.Sleep(time.Millisecond)
 
 	conn, err := net.Dial("tcp", "localhost:1847")
 	assert.Nil(t, err, "Wireserver is not listening.")
+
+	command := append(expected_command, '\n')
 
 	writer := bufio.NewWriter(conn)
 	_, err = writer.Write(command)
@@ -48,7 +51,7 @@ func Test_wireserver_reads_and_parses_a_line(t *testing.T) {
 	parser.Mock.AssertExpectations(t)
 }
 
-func Test_wireserver_reads_and_parses_next_line_after_processing_first_one(t *testing.T) {
+func Test_wireserver_reads_and_parses_line_by_line(t *testing.T) {
 	parser := &parser_mock{}
 	testee := &gourd_wire_server{parser}
 	done := startWireServer(testee)
@@ -60,18 +63,18 @@ func Test_wireserver_reads_and_parses_next_line_after_processing_first_one(t *te
 	assert.Nil(t, err, "Wireserver is not listening.")
 
 	// First command
-	command := []byte("[\"begin_scenario\"]\n")
+	command := []byte(`["begin_scenario"]`)
 	parser.On("parse", command).Return("").Once()
 	writer := bufio.NewWriter(conn)
-	_, err = writer.Write(command)
+	_, err = writer.Write(append(command, '\n'))
 	assert.Nil(t, err, "Failed to send command to wire server.")
 
 	writer.Flush()
 
 	// Next command
-	command = []byte("[\"end_scenario\"]\n")
+	command = []byte(`["end_scenario"]`)
 	parser.On("parse", command).Return("").Once()
-	_, err = writer.Write(command)
+	_, err = writer.Write(append(command, '\n'))
 	assert.Nil(t, err, "Failed to send command to wire server.")
 
 	writer.Flush()
@@ -81,14 +84,13 @@ func Test_wireserver_reads_and_parses_next_line_after_processing_first_one(t *te
 	parser.Mock.AssertExpectations(t)
 }
 
-func Test_wireserver_writes_response_from_parser(t *testing.T) {
+func Test_wireserver_sends_response_from_parser_including_newline(t *testing.T) {
 	parser := &parser_mock{}
 	testee := &gourd_wire_server{parser}
 	done := startWireServer(testee)
 
-	command := []byte("[\"begin_scenario\"]\n")
-	response := "[\"success\"]\n"
-	parser.On("parse", command).Return(response).Once()
+	response := `["success"]`
+	parser.On("parse", mock.Anything).Return(response).Once()
 
 	// Give the wire server some time to start accepting connection
 	time.Sleep(time.Millisecond)
@@ -96,12 +98,14 @@ func Test_wireserver_writes_response_from_parser(t *testing.T) {
 	conn, err := net.Dial("tcp", "localhost:1847")
 	assert.Nil(t, err, "Wireserver is not listening.")
 
+	command := []byte(`["begin_scenario"]`)
 	writer := bufio.NewWriter(conn)
-	_, err = writer.Write(command)
+	_, err = writer.Write(append(command, '\n'))
 	assert.Nil(t, err, "Failed to send command to wire server.")
 	writer.Flush()
 
-	assert_wireserver_responds(t, conn, response)
+	expected_response := response + "\n"
+	assert_wireserver_responds(t, conn, expected_response)
 
 	conn.Close()
 
