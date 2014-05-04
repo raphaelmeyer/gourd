@@ -112,3 +112,7 @@ func Test_invoking_a_step_whos_action_panics_returns_fail(t *testing.T) {
 func Test_invoking_a_failing_step_returns_the_failure_message(t *testing.T) {
 	t.Log("pending")
 }
+
+func Test_invoke_step_passes_the_context_created_in_begin_scenario(t *testing.T) {
+	t.Log("pending")
+}
