@@ -39,3 +39,24 @@ func Test_two_different_steps_return_a_different_id(t *testing.T) {
 
 	assert.NotEqual(t, first_id, second_id)
 }
+
+func Test_begin_scenario_creates_new_context_by_calling_the_injected_function(t *testing.T) {
+	called := false
+	testee := &gourd_steps{}
+	testee.new_context = func() interface{} {
+		called = true
+		return nil
+	}
+
+	testee.begin_scenario()
+
+	assert.True(t, called)
+}
+
+func Test_begin_scenario_ignores_the_injected_function_when_it_is_nil(t *testing.T) {
+	testee := &gourd_steps{}
+
+	assert.NotPanics(t, func() {
+		testee.begin_scenario()
+	})
+}
