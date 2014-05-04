@@ -8,6 +8,11 @@ type steps_mock struct {
 	mock.Mock
 }
 
+func (steps *steps_mock) begin_scenario() interface{} {
+	args := steps.Mock.Called()
+	return args.Get(0)
+}
+
 func (steps *steps_mock) matching_step(step string) (string, bool) {
 	args := steps.Mock.Called(step)
 	return args.String(0), args.Bool(1)

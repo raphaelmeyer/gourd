@@ -10,7 +10,10 @@ type stepContext struct {
 }
 
 func main() {
-	cucumber := gourd.NewCucumber()
+	cucumber := gourd.NewCucumber(func() interface{} {
+		testee := gourd.NewCucumber(nil)
+		return &stepContext{testee}
+	})
 
 	cucumber.Given("no step implementation").Pass()
 

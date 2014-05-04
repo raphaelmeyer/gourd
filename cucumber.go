@@ -9,8 +9,9 @@ type Cucumber interface {
 	Run()
 }
 
-func NewCucumber() Cucumber {
+func NewCucumber(new_context func() interface{}) Cucumber {
 	steps := &gourd_steps{}
+	steps.new_context = new_context
 	server := new_wire_server(steps)
 	return &gourd_cucumber{steps, server}
 }

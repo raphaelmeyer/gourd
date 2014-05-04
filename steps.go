@@ -13,14 +13,20 @@ const (
 )
 
 type steps interface {
+	begin_scenario() interface{}
 	matching_step(step string) (string, bool)
 	add_step(pattern string) Step
 	invoke_step(id string) (step_result, string)
 }
 
 type gourd_steps struct {
-	steps map[string]*gourd_step
-	id    int
+	new_context func() interface{}
+	steps       map[string]*gourd_step
+	id          int
+}
+
+func (steps *gourd_steps) begin_scenario() interface{} {
+	return nil
 }
 
 func (steps *gourd_steps) matching_step(pattern string) (string, bool) {
