@@ -126,5 +126,24 @@ func Test_invoking_a_failing_step_returns_the_failure_message(t *testing.T) {
 }
 
 func Test_invoke_step_passes_the_context_created_in_begin_scenario(t *testing.T) {
-	t.Log("pending")
+	type context_type struct{}
+	expected_context := &context_type{}
+
+	testee := &gourd_steps{}
+	testee.new_context = func() interface{} {
+		return expected_context
+	}
+
+	var actual_context interface{}
+	pattern := "arbitrary step pattern"
+	step := testee.add_step(pattern)
+	step.Do(func(context interface{}) {
+		actual_context = context
+	})
+	id, _ := testee.matching_step(pattern)
+
+	testee.begin_scenario()
+	testee.invoke_step(id)
+
+	assert.Exactly(t, expected_context, actual_context)
 }

@@ -21,13 +21,14 @@ type steps interface {
 
 type gourd_steps struct {
 	new_context func() interface{}
+	context     interface{}
 	steps       map[string]*gourd_step
 	id          int
 }
 
 func (steps *gourd_steps) begin_scenario() {
 	if steps.new_context != nil {
-		steps.new_context()
+		steps.context = steps.new_context()
 	}
 }
 
@@ -66,7 +67,7 @@ func (steps *gourd_steps) invoke_step(id string) (result step_result, message st
 		}
 	}()
 
-	step.action(nil)
+	step.action(steps.context)
 
 	return success, ""
 }
