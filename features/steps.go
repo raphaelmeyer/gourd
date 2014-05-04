@@ -5,30 +5,30 @@ import (
 	"net"
 )
 
-type stepContext struct {
+type step_context struct {
 	testee gourd.Cucumber
 }
 
 func main() {
 	cucumber := gourd.NewCucumber(func() interface{} {
 		testee := gourd.NewCucumber(nil)
-		return &stepContext{testee}
+		return &step_context{testee}
 	})
 
 	cucumber.Given("no step implementation").Pass()
 
 	cucumber.When("I run cucumber").Do(
 		func(context interface{}) {
-			stepContext, ok := context.(stepContext)
+			stepContext, ok := context.(*step_context)
 			if ok {
 				stepContext.testee.Run()
 				conn, err := net.Dial("tcp", "localhost:1847")
 				if err != nil {
-					panic("")
+					panic("Wire server is not listening")
 				}
 				conn.Close()
 			} else {
-				panic("")
+				panic("context")
 			}
 		})
 
