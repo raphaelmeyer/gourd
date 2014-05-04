@@ -110,7 +110,19 @@ func Test_invoking_a_step_whos_action_panics_returns_fail(t *testing.T) {
 }
 
 func Test_invoking_a_failing_step_returns_the_failure_message(t *testing.T) {
-	t.Log("pending")
+	testee := &gourd_steps{}
+
+	expected_message := "error message"
+	pattern := "arbitrary step pattern"
+	step := testee.add_step(pattern)
+	step.Do(func(context interface{}) {
+		panic(expected_message)
+	})
+	id, _ := testee.matching_step(pattern)
+
+	_, message := testee.invoke_step(id)
+
+	assert.Equal(t, expected_message, message)
 }
 
 func Test_invoke_step_passes_the_context_created_in_begin_scenario(t *testing.T) {

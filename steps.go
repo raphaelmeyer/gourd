@@ -60,9 +60,9 @@ func (steps *gourd_steps) invoke_step(id string) (result step_result, message st
 	}
 
 	defer func() {
-		if recover() != nil {
+		if err := recover(); err != nil {
 			result = fail
-			message = ""
+			message = err.(string)
 		}
 	}()
 
