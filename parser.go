@@ -28,7 +28,7 @@ func (parser *wire_protocol_parser) evaluate(command []interface{}) string {
 	case "step_matches":
 		return parser.step_matches(command[1])
 	case "begin_scenario":
-		return `["success"]`
+		return parser.begin_scenario()
 	case "end_scenario":
 		return `["success"]`
 	case "snippet_text":
@@ -65,5 +65,10 @@ func (parser *wire_protocol_parser) invoke(parameters interface{}) string {
 	case pending:
 		return `["pending"]`
 	}
+	return `["success"]`
+}
+
+func (parser *wire_protocol_parser) begin_scenario() string {
+	parser.steps.begin_scenario()
 	return `["success"]`
 }

@@ -2,6 +2,7 @@ package gourd
 
 import (
 	"bufio"
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"net"
@@ -9,14 +10,15 @@ import (
 	"time"
 )
 
-func Test_wireserver_accepts_one_connection_on_port_1847(t *testing.T) {
+func Test_wireserver_accepts_one_connection_on_the_specified_port(t *testing.T) {
+	var specified_port uint = 2531
 	testee := &gourd_wire_server{}
-	done := startWireServer(testee)
+	done := startWireServer(testee, specified_port)
 
 	// Give the wire server some time to start accepting connection
 	time.Sleep(time.Millisecond)
 
-	conn, err := net.Dial("tcp", "localhost:1847")
+	conn, err := net.Dial("tcp", fmt.Sprintf("localhost:%d", specified_port))
 	assert.Nil(t, err, "Wire server is not listening.")
 
 	conn.Close()
@@ -27,7 +29,7 @@ func Test_wireserver_accepts_one_connection_on_port_1847(t *testing.T) {
 func Test_wireserver_forwards_commands_to_parser_without_newlines(t *testing.T) {
 	parser := &parser_mock{}
 	testee := &gourd_wire_server{parser}
-	done := startWireServer(testee)
+	done := startWireServer(testee, DefaultPort)
 
 	expected_command := []byte(`["begin_scenario"]`)
 	parser.On("parse", expected_command).Return("").Once()
@@ -54,7 +56,7 @@ func Test_wireserver_forwards_commands_to_parser_without_newlines(t *testing.T) 
 func Test_wireserver_reads_and_parses_line_by_line(t *testing.T) {
 	parser := &parser_mock{}
 	testee := &gourd_wire_server{parser}
-	done := startWireServer(testee)
+	done := startWireServer(testee, DefaultPort)
 
 	// Give the wire server some time to start accepting connection
 	time.Sleep(time.Millisecond)
@@ -87,7 +89,7 @@ func Test_wireserver_reads_and_parses_line_by_line(t *testing.T) {
 func Test_wireserver_sends_response_from_parser_including_newline(t *testing.T) {
 	parser := &parser_mock{}
 	testee := &gourd_wire_server{parser}
-	done := startWireServer(testee)
+	done := startWireServer(testee, DefaultPort)
 
 	response := `["success"]`
 	parser.On("parse", mock.Anything).Return(response).Once()
@@ -113,10 +115,10 @@ func Test_wireserver_sends_response_from_parser_including_newline(t *testing.T) 
 	parser.Mock.AssertExpectations(t)
 }
 
-func startWireServer(server *gourd_wire_server) chan bool {
+func startWireServer(server *gourd_wire_server, port uint) chan bool {
 	done := make(chan bool)
 	go func() {
-		server.listen()
+		server.listen(port)
 		done <- true
 	}()
 	return done

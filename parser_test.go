@@ -7,12 +7,27 @@ import (
 )
 
 func Test_parser_returns_success_to_begin_scenario(t *testing.T) {
-	testee := &wire_protocol_parser{}
+	steps := &steps_mock{}
+	testee := &wire_protocol_parser{steps}
+
+	steps.On("begin_scenario").Return().Once()
 
 	command := []byte(`["begin_scenario"]`)
 	response := testee.parse(command)
 
 	assert.Equal(t, response, `["success"]`)
+}
+
+func Test_parser_notifies_steps_when_a_new_scenario_begins(t *testing.T) {
+	steps := &steps_mock{}
+	testee := &wire_protocol_parser{steps}
+
+	steps.On("begin_scenario").Return().Once()
+
+	command := []byte(`["begin_scenario"]`)
+	testee.parse(command)
+
+	steps.Mock.AssertExpectations(t)
 }
 
 func Test_parser_returns_success_to_end_scenario(t *testing.T) {

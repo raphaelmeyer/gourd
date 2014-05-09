@@ -7,7 +7,7 @@ import (
 )
 
 type wire_server interface {
-	listen()
+	listen(port uint)
 }
 
 type gourd_wire_server struct {
@@ -19,13 +19,13 @@ func new_wire_server(steps steps) wire_server {
 	return &gourd_wire_server{parser}
 }
 
-func (server *gourd_wire_server) listen() {
-	listener, err := net.Listen("tcp", DefaultPort)
+func (server *gourd_wire_server) listen(port uint) {
+	listener, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
 	if err != nil {
 		panic(err)
 	}
 	defer listener.Close()
-	fmt.Println("Listening on port", DefaultPort)
+	fmt.Println("Listening on port", port)
 
 	conn, err := listener.Accept()
 	if err != nil {
