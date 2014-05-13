@@ -7,3 +7,7 @@ Feature: Wire server
     Given a wire server running on port 1847
     Then cucumber can connect to port 1847
 
+  @wip
+  Scenario: Connection on a specified port
+    Given a wire server running on port 2345
+    Then cucumber can connect to port 2345
