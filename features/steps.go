@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"github.com/raphaelmeyer/gourd"
 	"net"
 	"time"
@@ -50,6 +51,22 @@ func main() {
 				panic("Wire server still running")
 			}
 		})
+
+	cucumber.When("a new scenario starts").Do(
+		func(context interface{}) {
+			step_context, _ := context.(*gourd_context)
+			writer := bufio.NewWriter(step_context.conn)
+			writer.WriteString(`["begin_scenario"]`)
+		})
+
+	cucumber.When("the scenario ends").Do(
+		func(context interface{}) {
+			step_context, _ := context.(*gourd_context)
+			writer := bufio.NewWriter(step_context.conn)
+			writer.WriteString(`["end_scenario"]`)
+		})
+
+	cucumber.Then("a new context has been created").Pending()
 
 	cucumber.Run()
 }
