@@ -3,48 +3,53 @@ package main
 import (
 	"github.com/raphaelmeyer/gourd"
 	"net"
+	"time"
 )
 
 type gourd_context struct {
 	testee gourd.Cucumber
 	conn   net.Conn
+	done   chan bool
 }
 
 func main() {
 	cucumber := gourd.NewCucumber(func() interface{} {
 		testee := gourd.NewCucumber(nil)
-		testee.SetPort(2847)
-
-		return &gourd_context{testee, nil}
+		return &gourd_context{testee, nil, nil}
 	})
 
-	cucumber.Given("a wire server running on port 1847").Do(
+	cucumber.Given("a wire server running on port 2345").Do(
 		func(context interface{}) {
 			step_context, _ := context.(*gourd_context)
-			go step_context.testee.Run()
+			step_context.testee.SetPort(2345)
+			step_context.done = make(chan bool)
+			go func() {
+				step_context.testee.Run()
+				step_context.done <- true
+			}()
 		})
 
-	cucumber.Then("cucumber can connect to port 1847").Do(
+	cucumber.When("cucumber connects to port 2345").Do(
 		func(context interface{}) {
 			step_context, _ := context.(*gourd_context)
-			var err error
-			step_context.conn, err = net.Dial("tcp", "localhost:2847")
-			if err != nil {
-				panic("Wire server is not listening")
+			step_context.conn, _ = net.Dial("tcp", "localhost:2345")
+		})
+
+	cucumber.When("cucumber closes the connection").Do(
+		func(context interface{}) {
+			step_context, _ := context.(*gourd_context)
+			step_context.conn.Close()
+		})
+
+	cucumber.Then("the wire server exits").Do(
+		func(context interface{}) {
+			step_context, _ := context.(*gourd_context)
+			select {
+			case <-step_context.done:
+			case <-time.After(time.Second):
+				panic("Wire server still running")
 			}
 		})
-
-	cucumber.Given("no step implementation").Pass()
-
-	cucumber.When("I run cucumber").Pending()
-
-	cucumber.When("a new scenario begins").Pending()
-
-	cucumber.When("the scenario has a step").Pending()
-
-	cucumber.When("the scenario ends").Pending()
-
-	cucumber.Then("an undefined step is reported").Pending()
 
 	cucumber.Run()
 }
