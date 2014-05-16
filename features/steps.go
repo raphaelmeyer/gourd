@@ -2,21 +2,28 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"github.com/raphaelmeyer/gourd"
 	"net"
 	"time"
 )
 
 type gourd_context struct {
-	testee gourd.Cucumber
-	conn   net.Conn
-	done   chan bool
+	testee   gourd.Cucumber
+	conn     net.Conn
+	done     chan bool
+	contexts int
 }
 
 func main() {
 	cucumber := gourd.NewCucumber(func() interface{} {
-		testee := gourd.NewCucumber(nil)
-		return &gourd_context{testee, nil, nil}
+		context := &gourd_context{}
+		testee := gourd.NewCucumber(func() interface{} {
+			context.contexts++
+			return nil
+		})
+		context.testee = testee
+		return context
 	})
 
 	cucumber.Given("a wire server running on port 2345").Do(
@@ -56,17 +63,37 @@ func main() {
 		func(context interface{}) {
 			step_context, _ := context.(*gourd_context)
 			writer := bufio.NewWriter(step_context.conn)
-			writer.WriteString(`["begin_scenario"]`)
+			writer.WriteString(`["begin_scenario"]` + "\n")
+			writer.Flush()
+			reader := bufio.NewReader(step_context.conn)
+			response, _ := reader.ReadString('\n')
+			if response != `["success"]`+"\n" {
+				fmt.Println(response)
+				panic("begin scenario failed")
+			}
 		})
 
 	cucumber.When("the scenario ends").Do(
 		func(context interface{}) {
 			step_context, _ := context.(*gourd_context)
 			writer := bufio.NewWriter(step_context.conn)
-			writer.WriteString(`["end_scenario"]`)
+			writer.WriteString(`["end_scenario"]` + "\n")
+			writer.Flush()
+			reader := bufio.NewReader(step_context.conn)
+			response, _ := reader.ReadString('\n')
+			if response != `["success"]`+"\n" {
+				fmt.Println(response)
+				panic("end scenario failed")
+			}
 		})
 
-	cucumber.Then("a new context has been created").Pending()
+	cucumber.Then("a new context has been created").Do(
+		func(context interface{}) {
+			step_context, _ := context.(*gourd_context)
+			if step_context.contexts != 1 {
+				panic(fmt.Sprintf("Expected 1 created context, but actual value is %d", step_context.contexts))
+			}
+		})
 
 	cucumber.Run()
 }

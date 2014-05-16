@@ -2,7 +2,6 @@ Feature: Scenario
   As a go developer
   I want to run scenarios
 
-  @wip
   Scenario: A scenario has a context
     Given a wire server running on port 2345
     When cucumber connects to port 2345
