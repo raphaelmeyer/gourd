@@ -110,6 +110,16 @@ func Test_parser_returns_snippet_text_for_when(t *testing.T) {
 	assert.Equal(t, response, expected_response)
 }
 
+func Test_parser_escapes_special_characters_in_snippet(t *testing.T) {
+	testee := &wire_protocol_parser{}
+
+	command := []byte(`["snippet_text",{"step_keyword":"Then","multiline_arg_class":"","step_name":"step with '\"quotes\"'"}]`)
+	response := testee.parse(command)
+
+	expected_response := `["success","cucumber.Then(\"step with '\\\"quotes\\\"'\").Pending()"]`
+	assert.Equal(t, response, expected_response)
+}
+
 func Test_parser_invokes_a_step_with_the_given_id(t *testing.T) {
 	steps := &steps_mock{}
 	testee := &wire_protocol_parser{steps}

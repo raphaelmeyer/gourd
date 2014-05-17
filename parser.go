@@ -2,6 +2,7 @@ package gourd
 
 import (
 	"encoding/json"
+	"strings"
 )
 
 type parser interface {
@@ -50,9 +51,10 @@ func (parser *wire_protocol_parser) step_matches(parameters interface{}) string 
 
 func (parser *wire_protocol_parser) snippet_text(parameters interface{}) string {
 	snippet := parameters.(map[string]interface{})
-	name := snippet["step_name"].(string)
+	name := strings.Replace(snippet["step_name"].(string), "\"", "\\\"", -1)
 	keyword := snippet["step_keyword"].(string)
-	return `["success","cucumber.` + keyword + `(\"` + name + `\").Pending()"]`
+	snippet_text, _ := json.Marshal(`cucumber.` + keyword + `("` + name + `").Pending()`)
+	return `["success",` + string(snippet_text) + `]`
 }
 
 func (parser *wire_protocol_parser) invoke(parameters interface{}) string {
