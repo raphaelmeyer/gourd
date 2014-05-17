@@ -2,7 +2,6 @@ Feature: Scenario
   As a go developer
   I want to run scenarios
 
-  @wip
   Scenario: An scenario with no steps
     Given a wire server running on port 2345
     And no given, when or then step

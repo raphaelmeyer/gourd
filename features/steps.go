@@ -68,12 +68,6 @@ func main() {
 			writer := bufio.NewWriter(step_context.conn)
 			writer.WriteString(`["begin_scenario"]` + "\n")
 			writer.Flush()
-			reader := bufio.NewReader(step_context.conn)
-			response, _ := reader.ReadString('\n')
-			if response != `["success"]`+"\n" {
-				fmt.Println(response)
-				panic("begin scenario failed")
-			}
 		})
 
 	cucumber.When("the scenario ends").Do(
@@ -82,6 +76,11 @@ func main() {
 			writer := bufio.NewWriter(step_context.conn)
 			writer.WriteString(`["end_scenario"]` + "\n")
 			writer.Flush()
+		})
+
+	cucumber.Then("the wire server returns \"success\"").Do(
+		func(context interface{}) {
+			step_context, _ := context.(*gourd_context)
 			reader := bufio.NewReader(step_context.conn)
 			response, _ := reader.ReadString('\n')
 			if response != `["success"]`+"\n" {
