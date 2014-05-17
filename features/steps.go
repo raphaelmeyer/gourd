@@ -37,6 +37,9 @@ func main() {
 			}()
 		})
 
+	cucumber.Given("no given, when or then step").Pass()
+	cucumber.When("cucumber runs the scenario").Pass()
+
 	cucumber.When("cucumber connects to port 2345").Do(
 		func(context interface{}) {
 			step_context, _ := context.(*gourd_context)
@@ -87,7 +90,7 @@ func main() {
 			}
 		})
 
-	cucumber.Then("a new context has been created").Do(
+	cucumber.Then("a new context is created").Do(
 		func(context interface{}) {
 			step_context, _ := context.(*gourd_context)
 			if step_context.contexts != 1 {

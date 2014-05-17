@@ -7,7 +7,8 @@ Feature: Scenario
     Given a wire server running on port 2345
     And no given, when or then step
     When cucumber runs the scenario
-    Then a new scenario starts
+    Then cucumber connects to port 2345
+    And a new scenario starts
     And a new context is created
     And the wire server returns "success"
     And the scenario ends
