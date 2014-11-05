@@ -1,17 +1,17 @@
 require 'tempfile'
 require 'rspec/expectations'
 
+Given(/^a go wire server$/) do
+  @gourd_thread = Thread.new() do
+    `go run test/wire_server.go`
+  end
+  sleep(0.5) # wait a little bit for the wire server to start
+end
+
 Given (/^the following feature:$/) do |feature|
   @feature_file = Tempfile.new("feature")
   @feature_file.write(feature)
   @feature_file.close
-end
-
-Given(/^a running wire server$/) do
-  @gourd_thread = Thread.new() do
-    `go run test/wire_server.go`
-  end
-  sleep(0.2) # wait a little bit for the wire server to start
 end
 
 When (/^I run cucumber$/) do

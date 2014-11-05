@@ -4,13 +4,13 @@ Feature: Steps
   I want to define steps
 
   Scenario: Undefined step
-    Given the following feature:
+    Given a go wire server
+    And the following feature:
       """
       Feature: feature
         Scenario: scenario
           Given an undefined step
       """
-    And a running wire server
     When I run cucumber
     Then the output should contain:
       """
