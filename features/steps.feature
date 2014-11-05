@@ -3,12 +3,18 @@ Feature: Steps
   As a go developer
   I want to define steps
 
-  @wip
   Scenario: Undefined step
-    Given no step implementation
+    Given the following feature:
+      """
+      Feature: feature
+        Scenario: scenario
+          Given an undefined step
+      """
+    And a running wire server
     When I run cucumber
-    And a new scenario begins
-    And the scenario has a step
-    And the scenario ends
-    Then an undefined step is reported
+    Then the output should contain:
+      """
+      1 scenario (1 undefined)
+      1 step (1 undefined)
+      """
 
