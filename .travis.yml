@@ -9,6 +9,7 @@ matrix:
 
 before_install:
   - if [ "$CUCUMBER" == "true" ]; then ( gem install cucumber ); fi
+  - if [ "$CUCUMBER" == "true" ]; then ( gem install rspec ); fi
 
 install:
   - go get -v ./...

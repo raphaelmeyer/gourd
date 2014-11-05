@@ -15,8 +15,7 @@ go wire server
 
 Run feature scenarios:
 ```
-go run features/steps.go
-cucumber
+cucumber --wip -t @wip
 ```
 
 ### TDD cycle
