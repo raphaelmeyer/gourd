@@ -63,3 +63,21 @@ Feature: Steps
       1 step (1 failed)
       """
 
+  Scenario: A combination of steps
+    Given a go wire server
+    And the following feature:
+      """
+      Feature: feature
+        Scenario: scenario
+          Given a step which passes
+          And a step which fails
+          Then a step which is pending
+          And a step which passes
+      """
+    When I run cucumber
+    Then the output should contain:
+      """
+      1 scenario (1 failed)
+      4 steps (1 failed, 2 skipped, 1 passed)
+      """
+
