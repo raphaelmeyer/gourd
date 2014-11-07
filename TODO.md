@@ -7,4 +7,5 @@
 * Feature test:
   * Snippets
   * Failing step
+  * More than one scenarios in a feature
 

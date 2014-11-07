@@ -48,3 +48,18 @@ Feature: Steps
       1 step (1 passed)
       """
 
+  Scenario: Failing step
+    Given a go wire server
+    And the following feature:
+      """
+      Feature: feature
+        Scenario: scenario
+          Given a step which fails
+      """
+    When I run cucumber
+    Then the output should contain:
+      """
+      1 scenario (1 failed)
+      1 step (1 failed)
+      """
+
