@@ -5,7 +5,5 @@
 * Add profiles for wip, html etc
 * Publish test results, docs
 * Feature test:
-  * Snippets
-  * Failing step
   * More than one scenarios in a feature
 
