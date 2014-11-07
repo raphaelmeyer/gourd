@@ -33,3 +33,18 @@ Feature: Steps
       1 step (1 pending)
       """
 
+  Scenario: Passing step
+    Given a go wire server
+    And the following feature:
+      """
+      Feature: feature
+        Scenario: scenario
+          Given a step which passes
+      """
+    When I run cucumber
+    Then the output should contain:
+      """
+      1 scenario (1 passed)
+      1 step (1 passed)
+      """
+

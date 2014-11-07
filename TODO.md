@@ -6,6 +6,5 @@
 * Publish test results, docs
 * Feature test:
   * Snippets
-  * Passing step
   * Failing step
 
