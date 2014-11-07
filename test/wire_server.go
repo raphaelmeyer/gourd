@@ -18,9 +18,11 @@ func main() {
 //			step_context, _ := context.(*gourd_context)
 //		})
 
-	cucumber.Given("A step that passes").Pass()
+	cucumber.Given("a step which is pending").Pending()
 
-	cucumber.Given("A step that fails").Fail()
+	cucumber.Given("a step which passes").Pass()
+
+	cucumber.Given("a step which fails").Fail()
 
 	cucumber.Run()
 }
