@@ -6,20 +6,25 @@ import (
 
 type gourd_context struct {
 	testee gourd.Cucumber
+	executed bool
 }
 
 func main() {
 	cucumber := gourd.NewCucumber(func() interface{} {
-		context := &gourd_context{}
-		context.testee = gourd.NewCucumber(func() interface{} {
+		scenario := &gourd_context{}
+		scenario.testee = gourd.NewCucumber(func() interface{} {
 			return nil
 		})
 
-		context.testee.Given("a step which is pending").Pending()
-		context.testee.Given("a step which passes").Pass()
-		context.testee.Given("a step which fails").Fail()
+		scenario.testee.Given("a step which is pending").Pending()
+		scenario.testee.Given("a step which passes").Pass()
+		scenario.testee.Given("a step which fails").Fail()
+		scenario.testee.Given("a step with code").Do(
+			func(context interface{}) {
+				//scenario.executed = true
+			})
 
-		return context
+		return scenario
 	})
 
 	cucumber.Given("a go wire server").Do(
@@ -31,6 +36,13 @@ func main() {
 			}()
 		})
 
+	cucumber.Then("the code was executed").Do(
+		func(context interface{}) {
+			scenario, _ := context.(*gourd_context)
+			if ! scenario.executed {
+				panic("code was not executed")
+			}
+		})
 
 	cucumber.Run()
 }

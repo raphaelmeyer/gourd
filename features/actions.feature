@@ -4,17 +4,14 @@ Feature: Step actions and behavior
   I want to define the actions and behavior of steps
 
   @wip
-  Scenario: Execute user defined step code
+  Scenario: Invoke code of a step
     Given a go wire server
     And the following feature:
       """
       Feature: feature
         Scenario: scenario
-          When an action is triggered
-          Then the action 
+          Given a step with code
       """
     When I run cucumber
-    Then the output should contain:
-      """
-      
-      """
+    Then the code was executed
+
