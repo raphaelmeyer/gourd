@@ -3,7 +3,6 @@ Feature: Step actions and behavior
   As a go developer
   I want to define the actions and behavior of steps
 
-  @wip
   Scenario: Invoke code of a step
     Given a go wire server
     And the following feature:

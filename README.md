@@ -15,6 +15,7 @@ go wire server
 
 Run feature scenarios:
 ```
+go run features/wire_server.go
 cucumber --wip -t @wip
 ```
 

@@ -21,7 +21,7 @@ func main() {
 		scenario.testee.Given("a step which fails").Fail()
 		scenario.testee.Given("a step with code").Do(
 			func(context interface{}) {
-				//scenario.executed = true
+				scenario.executed = true
 			})
 
 		return scenario
