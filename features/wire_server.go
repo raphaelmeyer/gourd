@@ -27,6 +27,15 @@ func main() {
 		return scenario
 	})
 
+	cucumber.Given("a step with pattern \"failure step\" that fails with message \"failure message\"").Do(
+		func(context interface{}) {
+			scenario, _ := context.(*gourd_context)
+			scenario.testee.Given("failure step").Do(
+				func(context interface{}) {
+					//panic("failure message")
+				})
+			})
+
 	cucumber.Given("a go wire server").Do(
 		func(context interface{}) {
 			scenario, _ := context.(*gourd_context)

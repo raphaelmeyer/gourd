@@ -14,3 +14,18 @@ Feature: Step actions and behavior
     When I run cucumber
     Then the code was executed
 
+  @wip
+  Scenario:
+    Given a step with pattern "failure step" that fails with message "failure message"
+    And a go wire server
+    And the following feature:
+      """
+      Feature: feature
+        Scenario: scenario
+          Given failure step
+      """
+    When I run cucumber
+    Then the output should contain:
+      """
+      failure message
+      """
