@@ -13,7 +13,7 @@ go wire server
 
 ### BDD cycle
 
-Run feature scenarios:
+Run acceptance tests:
 ```
 go run features/wire_server.go
 cucumber --wip -t @wip
@@ -26,10 +26,8 @@ Run unit tests:
 go test
 ```
 
-### Format
-
+Format code:
 ```
 go fmt ./...
 ```
-
 
