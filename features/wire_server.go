@@ -5,7 +5,7 @@ import (
 )
 
 type gourd_context struct {
-	testee gourd.Cucumber
+	testee   gourd.Cucumber
 	executed bool
 }
 
@@ -32,9 +32,9 @@ func main() {
 			scenario, _ := context.(*gourd_context)
 			scenario.testee.Given("failure step").Do(
 				func(context interface{}) {
-					//panic("failure message")
+					panic("failure message")
 				})
-			})
+		})
 
 	cucumber.Given("a go wire server").Do(
 		func(context interface{}) {
@@ -48,7 +48,7 @@ func main() {
 	cucumber.Then("the code was executed").Do(
 		func(context interface{}) {
 			scenario, _ := context.(*gourd_context)
-			if ! scenario.executed {
+			if !scenario.executed {
 				panic("code was not executed")
 			}
 		})

@@ -14,7 +14,6 @@ Feature: Step actions and behavior
     When I run cucumber
     Then the code was executed
 
-  @wip
   Scenario:
     Given a step with pattern "failure step" that fails with message "failure message"
     And a go wire server
