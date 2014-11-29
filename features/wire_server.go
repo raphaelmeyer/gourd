@@ -5,8 +5,9 @@ import (
 )
 
 type gourd_context struct {
-	testee   gourd.Cucumber
-	executed bool
+	testee         gourd.Cucumber
+	executed       bool
+	matched_number int
 }
 
 func main() {
@@ -50,6 +51,24 @@ func main() {
 			scenario, _ := context.(*gourd_context)
 			if !scenario.executed {
 				panic("code was not executed")
+			}
+		})
+
+	cucumber.Given("step with pattern \"^a number (\\d+)$\"").Do(
+		func(context interface{}) {
+			scenario, _ := context.(*gourd_context)
+			scenario.testee.Given("^a number (\\d+)$").Do(
+				func(context interface{}) {
+					TODO := 0
+					scenario.matched_number = TODO
+				})
+		})
+
+	cucumber.Then("the given step matches number 1234").Do(
+		func(context interface{}) {
+			scenario, _ := context.(*gourd_context)
+			if scenario.matched_number != 1234 {
+				panic("did not match expected number")
 			}
 		})
 
