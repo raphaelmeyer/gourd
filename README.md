@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/raphaelmeyer/gourd.png)](https://travis-ci.org/raphaelmeyer/gourd)
 [![Coverage Status](https://coveralls.io/repos/raphaelmeyer/gourd/badge.png)](https://coveralls.io/r/raphaelmeyer/gourd)
+[![GoDoc](https://godoc.org/github.com/raphaelmeyer/gourd?status.png)](http://godoc.org/github.com/raphaelmeyer/gourd)
 
 go wire server
 
