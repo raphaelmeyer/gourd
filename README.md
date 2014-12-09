@@ -1,8 +1,8 @@
 # gourd
 
-[![Build Status](https://travis-ci.org/raphaelmeyer/gourd.png)](https://travis-ci.org/raphaelmeyer/gourd)
-[![Coverage Status](https://coveralls.io/repos/raphaelmeyer/gourd/badge.png)](https://coveralls.io/r/raphaelmeyer/gourd)
-[![GoDoc](https://godoc.org/github.com/raphaelmeyer/gourd?status.png)](http://godoc.org/github.com/raphaelmeyer/gourd)
+[![Build Status](https://travis-ci.org/raphaelmeyer/gourd.svg?branch=master)](https://travis-ci.org/raphaelmeyer/gourd)
+[![Coverage Status](https://img.shields.io/coveralls/raphaelmeyer/gourd.svg)](https://coveralls.io/r/raphaelmeyer/gourd?branch=master)
+[![GoDoc](https://godoc.org/github.com/raphaelmeyer/gourd?status.svg)](http://godoc.org/github.com/raphaelmeyer/gourd)
 
 go wire server
 
