@@ -1,19 +1,27 @@
 language: go
 
+go:
+  - 1.1
+  - 1.2
+  - 1.3
+  - tip
+
+env:
+  - COVERAGE=false
+
 matrix:
   include:
-    - go: 1.1
-      env: CUCUMBER=true COVERAGE=false
-    - go: 1.2
-      env: CUCUMBER=true COVERAGE=false
     - go: 1.3
-      env: CUCUMBER=true COVERAGE=true
-    - go: tip
-      env: CUCUMBER=true COVERAGE=false
+      env: COVERAGE=true
+
+matrix:
+  exclude:
+    - go: 1.3
+      env: COVERAGE=false
 
 before_install:
-  - if [ "$CUCUMBER" == "true" ]; then ( gem install cucumber ); fi
-  - if [ "$CUCUMBER" == "true" ]; then ( gem install rspec ); fi
+  - gem install cucumber
+  - gem install rspec
 
 install:
   - go get -v ./...
@@ -22,8 +30,8 @@ install:
   - if [ "$COVERAGE" == "true" ]; then ( go get -v code.google.com/p/go.tools/cmd/cover ); fi
 
 script:
-  - if [ "$CUCUMBER" == "true" ]; then ( go run features/wire_server.go & ); ( sleep 1 && cucumber --tags ~@wip); fi
-  - if [ "$CUCUMBER" == "true" ]; then ( go run features/wire_server.go & ); ( sleep 1 && cucumber --wip --tags @wip); fi
+  - go run features/wire_server.go & && sleep 1 && cucumber --tags ~@wip
+  - go run features/wire_server.go & && sleep 1 && cucumber --wip --tags @wip
   - if [ "$COVERAGE" == "false" ]; then ( go test -v ); fi
   - if [ "$COVERAGE" == "true" ]; then ( go test -v -covermode=count -coverprofile=gourd.cov ); fi
   - if [ "$COVERAGE" == "true" ]; then ( PATH="$PATH:~/gopath/bin" goveralls -coverprofile=gourd.cov -service=travis-ci ); fi
