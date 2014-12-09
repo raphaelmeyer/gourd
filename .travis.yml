@@ -28,8 +28,8 @@ install:
   - if [ "$COVERAGE" == "true" ]; then ( go get -v code.google.com/p/go.tools/cmd/cover ); fi
 
 script:
-  - go run features/wire_server.go & && sleep 1 && cucumber --tags ~@wip
-  - go run features/wire_server.go & && sleep 1 && cucumber --wip --tags @wip
+  - go run features/wire_server.go & ; sleep 1 ; cucumber --tags ~@wip
+  - go run features/wire_server.go & ; sleep 1 ; cucumber --wip --tags @wip
   - if [ "$COVERAGE" == "false" ]; then ( go test -v ); fi
   - if [ "$COVERAGE" == "true" ]; then ( go test -v -covermode=count -coverprofile=gourd.cov ); fi
   - if [ "$COVERAGE" == "true" ]; then ( PATH="$PATH:~/gopath/bin" goveralls -coverprofile=gourd.cov -service=travis-ci ); fi
