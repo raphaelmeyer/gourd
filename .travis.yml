@@ -26,7 +26,7 @@ install:
   - go get -v ./...
   - go get -v github.com/stretchr/testify
   - if [ "$COVERAGE" == "true" ]; then ( go get -v github.com/mattn/goveralls ); fi
-  - if [ "$COVERAGE" == "true" ]; then ( go get -v code.google.com/p/go.tools/cmd/cover ); fi
+  - if [ "$COVERAGE" == "true" ]; then ( go get -v golang.org/x/tools/cmd/cmd/cover ); fi
 
 script:
   - ( go run features/wire_server.go & ) ; sleep 1 ; cucumber --tags ~@wip
