@@ -8,15 +8,24 @@ go:
   - tip
 
 env:
-  - COVERAGE=false
+  matrix:
+    - COVERAGE=false
+    - PUBLISH=false
+
+  global:
+    secure: BFFoJKnSYjja7BJ3KD86CxCw/BXgP/5bs2RTiObguYSoE8044cMsYafIzz2tN4sUhHHNGoz83F6cjMl3knNRcNK5YL/05YzKTBdXuSlVkCwwWeGqwQghHL2l3UpG5TAn9yIwoZXB9mqRN6vymoqsXhdC7yK5n9QroQDeJAws0Ao=
 
 matrix:
   exclude:
     - go: 1.4
-      env: COVERAGE=false
+      env:
+        - COVERAGE=false
+        - PUBLISH=false
   include:
     - go: 1.4
-      env: COVERAGE=true
+      env:
+        - COVERAGE=true
+        - PUBLISH=true
 
 before_install:
   - gem install cucumber
@@ -29,9 +38,16 @@ install:
   - if [ "$COVERAGE" == "true" ]; then ( go get -v golang.org/x/tools/cmd/cover ); fi
 
 script:
-  - ( go run features/wire_server.go & ) ; sleep 1 ; cucumber --tags ~@wip
-  - ( go run features/wire_server.go & ) ; sleep 1 ; cucumber --wip --tags @wip
+  - ( go run features/wire_server.go & ) ; sleep 1 ; cucumber --profile done --profile html
+  - ( go run features/wire_server.go & ) ; sleep 1 ; cucumber --profile wip
   - if [ "$COVERAGE" == "false" ]; then ( go test -v ); fi
   - if [ "$COVERAGE" == "true" ]; then ( go test -v -covermode=count -coverprofile=gourd.cov ); fi
   - if [ "$COVERAGE" == "true" ]; then ( PATH="$PATH:~/gopath/bin" goveralls -coverprofile=gourd.cov -service=travis-ci ); fi
+
+after_success:
+  - if [ "$PUBLISH" == "true" ]; then ( ./update-gh-pages.sh ); fi
+
+branches:
+  except:
+    - gh-pages
 
