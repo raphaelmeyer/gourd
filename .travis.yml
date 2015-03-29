@@ -24,7 +24,8 @@ before_install:
   - gem install rspec
 
 install:
-  - go get -v -t ./...
+  - go get -v ./...
+  - go get -v github.com/stretchr/testify
   - if [ "$PUBLISH" == "true" ]; then ( go get -v github.com/mattn/goveralls ); fi
   - if [ "$PUBLISH" == "true" ]; then ( go get -v golang.org/x/tools/cmd/cover ); fi
 
