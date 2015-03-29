@@ -1,6 +1,6 @@
 Feature: Patterns to match steps
   In order to reuse steps with different parameters
-  I want to use regex when defining a step pattern
+  I want to use regular expressions in step patterns
 
   @wip
   Scenario: Match a number
@@ -12,5 +12,6 @@ Feature: Patterns to match steps
         Scenario: scenario
           Given a number 1234
       """
-    Then the given step matches number 1234
+    When I run cucumber
+    Then number 1234 is passed to the matching step
 
