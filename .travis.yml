@@ -8,8 +8,7 @@ go:
   - tip
 
 env:
-  matrix:
-    - COVERAGE=false PUBLISH=false
+  - COVERAGE=false PUBLISH=false
 
   global:
     secure: BFFoJKnSYjja7BJ3KD86CxCw/BXgP/5bs2RTiObguYSoE8044cMsYafIzz2tN4sUhHHNGoz83F6cjMl3knNRcNK5YL/05YzKTBdXuSlVkCwwWeGqwQghHL2l3UpG5TAn9yIwoZXB9mqRN6vymoqsXhdC7yK5n9QroQDeJAws0Ao=

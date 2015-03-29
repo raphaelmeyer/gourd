@@ -20,6 +20,7 @@ if [ "${TRAVIS_PULL_REQUEST}" == "false" ]; then
   cp -rf ${HOME}/reports/* ${HOME}/gh-pages
 
   #go into diractory and add, commit and push files
+  cd ${HOME}/gh-pages
   git add -f .
   git commit -m "Travis build ${TRAVIS_BUILD_NUMBER} pushed to gh-pages"
   git push -fq origin gh-pages > /dev/null
