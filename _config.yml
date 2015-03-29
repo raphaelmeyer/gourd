@@ -1,4 +1,4 @@
 name: gourd
 markdown: redcarpet
 pygments: true
-
+baseurl: /gourd
