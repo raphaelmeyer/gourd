@@ -2,7 +2,13 @@
 
 ## Setup
 
-Install git, go, cucumber
+Install git, go, ruby
+
+Install cucumber:
+```
+gem install cucumber
+gem install rspec
+```
 
 Clone gourd into your GOPATH:
 ```
@@ -31,6 +37,12 @@ go test
 ### BDD cycle
 
 Run acceptance tests:
+```
+go run features/wire_server.go
+cucumber -t ~@wip
+```
+
+See work in progress
 ```
 go run features/wire_server.go
 cucumber --wip -t @wip
