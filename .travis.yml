@@ -43,3 +43,8 @@ branches:
   except:
     - gh-pages
 
+notifications:
+  email:
+    on_success: never
+    on_failure: always
+
