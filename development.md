@@ -39,13 +39,13 @@ go test
 Run acceptance tests:
 ```
 go run features/wire_server.go
-cucumber -t ~@wip
+cucumber -p done
 ```
 
-See work in progress
+See work in progress:
 ```
 go run features/wire_server.go
-cucumber --wip -t @wip
+cucumber -p wip
 ```
 
 ### TDD cycle
