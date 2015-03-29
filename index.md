@@ -1,6 +1,6 @@
 ---
 title: Additional artifacts
-layout: page
+layout: default
 ---
 
 # Cucumber output
