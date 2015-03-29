@@ -1,6 +1,5 @@
 done: --tags ~@wip
 wip: --wip --tags @wip
 
-html_quiet: --format html --out features.html
-html: --format pretty --profile html_quiet
+html: --format pretty --format html --out output.html
 

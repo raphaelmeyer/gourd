@@ -30,8 +30,8 @@ install:
   - if [ "$PUBLISH" == "true" ]; then ( go get -v golang.org/x/tools/cmd/cover ); fi
 
 script:
-  - ( go run features/wire_server.go & ) ; sleep 1 ; cucumber --profile done --profile html
-  - ( go run features/wire_server.go & ) ; sleep 1 ; cucumber --profile wip
+  - ( go run features/wire_server.go & ) ; sleep 1 ; cucumber -p done -p html ; mv output.html features.html
+  - ( go run features/wire_server.go & ) ; sleep 1 ; cucumber -p wip -p html ; mv output.html wip.html
   - if [ "$PUBLISH" == "false" ]; then ( go test -v ); fi
   - if [ "$PUBLISH" == "true" ]; then ( go test -v -covermode=count -coverprofile=gourd.cov ); fi
   - if [ "$PUBLISH" == "true" ]; then ( PATH="$PATH:~/gopath/bin" goveralls -coverprofile=gourd.cov -service=travis-ci ); fi

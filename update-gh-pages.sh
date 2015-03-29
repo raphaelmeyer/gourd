@@ -7,6 +7,7 @@ if [ "${TRAVIS_PULL_REQUEST}" == "false" ]; then
 
   #copy data we're interested in to other place
   cp features.html ${HOME}/reports
+  cp wip.html ${HOME}/reports
 
   #go to home and setup git
   cd ${HOME}
