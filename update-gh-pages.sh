@@ -6,7 +6,7 @@ if [ "${TRAVIS_PULL_REQUEST}" == "false" ]; then
   mkdir -p ${HOME}/reports
 
   #copy data we're interested in to other place
-  cp features/report.html ${HOME}/reports
+  cp features.html ${HOME}/reports
 
   #go to home and setup git
   cd ${HOME}
