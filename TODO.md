@@ -6,4 +6,5 @@
 * Documentation (godoc)
 * How to get starte (readme.md)
 * Update gourd example
+* Add "Getting started" (gourd or gourd example?)
 
