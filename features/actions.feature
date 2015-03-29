@@ -1,9 +1,9 @@
 Feature: Step actions and behavior
-  In order to test my application
+  In order to validate implementations against acceptance criterias
   As a go developer
-  I want to define the actions and behavior of steps
+  I want to define actions and behavior of cucumber steps
 
-  Scenario: Invoke code of a step
+  Scenario: Invoke user defined code of a step
     Given a go wire server
     And the following feature:
       """
@@ -14,7 +14,7 @@ Feature: Step actions and behavior
     When I run cucumber
     Then the code was executed
 
-  Scenario:
+  Scenario: Report the message of a failing step
     Given a step with pattern "failure step" that fails with message "failure message"
     And a go wire server
     And the following feature:
@@ -28,3 +28,4 @@ Feature: Step actions and behavior
       """
       failure message
       """
+

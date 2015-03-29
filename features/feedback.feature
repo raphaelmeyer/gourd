@@ -1,9 +1,9 @@
-Feature: Steps
-  In order to develop behavior driven
+Feature: Scenario validation
+  In order to delevop behavior driven
   As a go developer
-  I want to define steps
+  I want to get feedback about success or failure of steps and scenarios
 
-  Scenario: Undefined step
+  Scenario: An undefined step
     Given a go wire server
     And the following feature:
       """
@@ -18,7 +18,7 @@ Feature: Steps
       1 step (1 undefined)
       """
 
-  Scenario: Pending step
+  Scenario: A pending step
     Given a go wire server
     And the following feature:
       """
@@ -33,7 +33,7 @@ Feature: Steps
       1 step (1 pending)
       """
 
-  Scenario: Passing step
+  Scenario: A passing step
     Given a go wire server
     And the following feature:
       """
@@ -48,7 +48,7 @@ Feature: Steps
       1 step (1 passed)
       """
 
-  Scenario: Failing step
+  Scenario: A failing step
     Given a go wire server
     And the following feature:
       """
@@ -63,7 +63,7 @@ Feature: Steps
       1 step (1 failed)
       """
 
-  Scenario: A combination of steps
+  Scenario: A combination of undefined, passing and failing steps
     Given a go wire server
     And the following feature:
       """

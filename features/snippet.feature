@@ -2,7 +2,7 @@ Feature: Snippets
   In order to quickly add new steps
   I want code snippets for undefined steps
 
-  Scenario: Snippet
+  Scenario: Suggest go code snippets for undefined steps
     Given a go wire server
     And the following feature:
       """
