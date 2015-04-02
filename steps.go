@@ -2,7 +2,6 @@ package gourd
 
 import (
 	"fmt"
-	"regexp"
 )
 
 type step_result int
@@ -46,8 +45,7 @@ func (steps *gourd_steps) add_step(pattern string) Step {
 	if steps.steps == nil {
 		steps.steps = make(map[string]*gourd_step)
 	}
-	regex := regexp.MustCompile(pattern)
-	step := &gourd_step{regex, nil}
+	step := new_step(pattern)
 	steps.steps[steps.nextId()] = step
 	return step
 }

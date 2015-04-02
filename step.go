@@ -12,7 +12,7 @@ type Step interface {
 }
 
 type gourd_step struct {
-	regex * regexp.Regexp
+	regex  *regexp.Regexp
 	action func(context interface{}, args ...interface{})
 }
 
@@ -32,4 +32,9 @@ func (step *gourd_step) Fail() {
 	step.action = func(context interface{}, args ...interface{}) {
 		panic("")
 	}
+}
+
+func new_step(pattern string) *gourd_step {
+	regex := regexp.MustCompile(pattern)
+	return &gourd_step{regex, nil}
 }
