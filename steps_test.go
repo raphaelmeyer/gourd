@@ -60,3 +60,13 @@ func Test_begin_scenario_ignores_the_injected_function_when_it_is_nil(t *testing
 		testee.begin_scenario()
 	})
 }
+
+func Test_step_pattern_is_matched_as_a_regular_expression(t *testing.T) {
+	testee := &gourd_steps{}
+
+	pattern := "match number (\\d+)"
+	testee.add_step(pattern)
+
+	_, match := testee.matching_step("match number 42")
+	assert.True(t, match)
+}

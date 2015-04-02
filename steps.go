@@ -2,6 +2,7 @@ package gourd
 
 import (
 	"fmt"
+	"regexp"
 )
 
 type step_result int
@@ -34,7 +35,8 @@ func (steps *gourd_steps) begin_scenario() {
 
 func (steps *gourd_steps) matching_step(pattern string) (string, bool) {
 	for id, step := range steps.steps {
-		if step.pattern == pattern {
+		regex := regexp.MustCompile(step.pattern)
+		if regex.MatchString(pattern) {
 			return id, true
 		}
 	}
