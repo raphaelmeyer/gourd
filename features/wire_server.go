@@ -54,7 +54,7 @@ func main() {
 			}
 		})
 
-	cucumber.Given("step with pattern \"^a number (\\d+)$\"").Do(
+	cucumber.Given("step with pattern \"\\^a number \\(\\\\d\\+\\)\\$\"").Do(
 		func(context interface{}, args ...interface{}) {
 			scenario, _ := context.(*gourd_context)
 			scenario.testee.Given("^a number (\\d+)$").Do(
