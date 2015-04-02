@@ -35,8 +35,7 @@ func (steps *gourd_steps) begin_scenario() {
 
 func (steps *gourd_steps) matching_step(pattern string) (string, bool) {
 	for id, step := range steps.steps {
-		regex := regexp.MustCompile(step.pattern)
-		if regex.MatchString(pattern) {
+		if step.regex.MatchString(pattern) {
 			return id, true
 		}
 	}
@@ -47,7 +46,8 @@ func (steps *gourd_steps) add_step(pattern string) Step {
 	if steps.steps == nil {
 		steps.steps = make(map[string]*gourd_step)
 	}
-	step := &gourd_step{pattern, nil}
+	regex := regexp.MustCompile(pattern)
+	step := &gourd_step{regex, nil}
 	steps.steps[steps.nextId()] = step
 	return step
 }
