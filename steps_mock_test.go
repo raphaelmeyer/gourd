@@ -12,9 +12,9 @@ func (steps *steps_mock) begin_scenario() {
 	_ = steps.Mock.Called()
 }
 
-func (steps *steps_mock) matching_step(step string) (string, bool) {
+func (steps *steps_mock) matching_step(step string) (string, bool, []argument) {
 	args := steps.Mock.Called(step)
-	return args.String(0), args.Bool(1)
+	return args.String(0), args.Bool(1), args.Get(2).([]argument)
 }
 
 func (steps *steps_mock) add_step(pattern string) Step {

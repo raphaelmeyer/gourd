@@ -14,7 +14,7 @@ const (
 
 type steps interface {
 	begin_scenario()
-	matching_step(step string) (string, bool)
+	matching_step(step string) (string, bool, []argument)
 	add_step(pattern string) Step
 	invoke_step(id string) (step_result, string)
 }
@@ -32,13 +32,13 @@ func (steps *gourd_steps) begin_scenario() {
 	}
 }
 
-func (steps *gourd_steps) matching_step(pattern string) (string, bool) {
+func (steps *gourd_steps) matching_step(pattern string) (string, bool, []argument) {
 	for id, step := range steps.steps {
 		if step.regex.MatchString(pattern) {
-			return id, true
+			return id, true, []argument{}
 		}
 	}
-	return "", false
+	return "", false, []argument{}
 }
 
 func (steps *gourd_steps) add_step(pattern string) Step {

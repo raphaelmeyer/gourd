@@ -8,7 +8,7 @@ import (
 func Test_returns_false_when_no_matching_step_is_defined(t *testing.T) {
 	testee := &gourd_steps{}
 
-	_, match := testee.matching_step("undefined step")
+	_, match, _ := testee.matching_step("undefined step")
 	assert.False(t, match)
 }
 
@@ -18,7 +18,7 @@ func Test_matching_a_step_returns_a_non_empty_id(t *testing.T) {
 	pattern := "pattern"
 	testee.add_step(pattern)
 
-	id, match := testee.matching_step(pattern)
+	id, match, _ := testee.matching_step(pattern)
 	assert.True(t, match)
 	assert.NotEqual(t, id, "")
 }
@@ -31,10 +31,10 @@ func Test_two_different_steps_return_a_different_id(t *testing.T) {
 	testee.add_step(first_pattern)
 	testee.add_step(second_pattern)
 
-	first_id, match := testee.matching_step(first_pattern)
+	first_id, match, _ := testee.matching_step(first_pattern)
 	assert.True(t, match)
 
-	second_id, match := testee.matching_step(second_pattern)
+	second_id, match, _ := testee.matching_step(second_pattern)
 	assert.True(t, match)
 
 	assert.NotEqual(t, first_id, second_id)
@@ -67,6 +67,6 @@ func Test_step_pattern_is_matched_as_a_regular_expression(t *testing.T) {
 	pattern := "match number (\\d+)"
 	testee.add_step(pattern)
 
-	_, match := testee.matching_step("match number 42")
+	_, match, _ := testee.matching_step("match number 42")
 	assert.True(t, match)
 }
