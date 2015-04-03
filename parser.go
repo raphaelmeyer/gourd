@@ -2,6 +2,7 @@ package gourd
 
 import (
 	"encoding/json"
+	"fmt"
 	"strings"
 )
 
@@ -46,7 +47,9 @@ func (parser *wire_protocol_parser) step_matches(parameters interface{}) string 
 	if matches {
 		args_string := ""
 		if len(arguments) > 0 {
-			args_string = `{"val":"value","pos":5}`
+			value := arguments[0].value
+			position := fmt.Sprintf("%d", arguments[0].position)
+			args_string = `{"val":"` + value + `","pos":` + position + `}`
 		}
 		return `["success",[{"id":"` + id + `","args":[` + args_string + `]}]]`
 	}
