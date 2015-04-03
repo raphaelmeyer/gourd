@@ -42,9 +42,13 @@ func (parser *wire_protocol_parser) evaluate(command []interface{}) string {
 
 func (parser *wire_protocol_parser) step_matches(parameters interface{}) string {
 	pattern := parameters.(map[string]interface{})["name_to_match"].(string)
-	id, matches, _ := parser.steps.matching_step(pattern)
+	id, matches, arguments := parser.steps.matching_step(pattern)
 	if matches {
-		return `["success",[{"id":"` + id + `","args":[]}]]`
+		args_string := ""
+		if len(arguments) > 0 {
+			args_string = `{"val":"value","pos":5}`
+		}
+		return `["success",[{"id":"` + id + `","args":[` + args_string + `]}]]`
 	}
 	return `["success",[]]`
 }

@@ -211,7 +211,7 @@ func Test_parser_returns_capturing_groups_as_arguments(t *testing.T) {
 	command := []byte(`["step_matches",{"name_to_match":"some value"}]`)
 	response := testee.parse(command)
 
-	expected_response := `["success",[{"id":"47","args":[{"val":"value", "pos":5}]}]]`
+	expected_response := `["success",[{"id":"47","args":[{"val":"value","pos":5}]}]]`
 
 	assert.Equal(t, response, expected_response)
 
