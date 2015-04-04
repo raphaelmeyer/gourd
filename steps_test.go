@@ -70,3 +70,17 @@ func Test_step_pattern_is_matched_as_a_regular_expression(t *testing.T) {
 	_, match, _ := testee.matching_step("match number 42")
 	assert.True(t, match)
 }
+
+func Test_a_capturing_group_is_returned_with_value_and_position(t *testing.T) {
+	testee := &gourd_steps{}
+
+	pattern := "match number (\\d+)"
+	testee.add_step(pattern)
+
+	_, _, arguments := testee.matching_step("match number 42")
+
+	expected := []argument{
+		argument{value: "42", position: 13}}
+
+	assert.Equal(t, expected, arguments)
+}
