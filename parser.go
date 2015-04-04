@@ -46,10 +46,12 @@ func (parser *wire_protocol_parser) step_matches(parameters interface{}) string 
 	id, matches, arguments := parser.steps.matching_step(pattern)
 	if matches {
 		args_string := ""
-		if len(arguments) > 0 {
-			value := arguments[0].value
-			position := fmt.Sprintf("%d", arguments[0].position)
-			args_string = `{"val":"` + value + `","pos":` + position + `}`
+		for i, argument := range arguments {
+			if i > 0 {
+				args_string += ","
+			}
+			position := fmt.Sprintf("%d", argument.position)
+			args_string += `{"val":"` + argument.value + `","pos":` + position + `}`
 		}
 		return `["success",[{"id":"` + id + `","args":[` + args_string + `]}]]`
 	}

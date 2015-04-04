@@ -200,11 +200,12 @@ func Test_parser_returns_fail_when_the_command_is_malformed_json(t *testing.T) {
 	assert.Equal(t, response, expected_response)
 }
 
-func Test_parser_returns_capturing_groups_as_arguments(t *testing.T) {
+func Test_parser_returns_a_capturing_group_as_an_argument(t *testing.T) {
 	steps := &steps_mock{}
 	testee := &wire_protocol_parser{steps}
 
-	arguments := []argument{argument{value: "value", position: 5}}
+	arguments := []argument{
+		argument{value: "value", position: 5}}
 
 	steps.On("matching_step", mock.Anything).Return("47", true, arguments).Once()
 
@@ -213,7 +214,28 @@ func Test_parser_returns_capturing_groups_as_arguments(t *testing.T) {
 
 	expected_response := `["success",[{"id":"47","args":[{"val":"value","pos":5}]}]]`
 
-	assert.Equal(t, response, expected_response)
+	assert.Equal(t, expected_response, response)
+
+	steps.Mock.AssertExpectations(t)
+}
+
+func Test_parser_returns_all_capturing_groups_as_arguments(t *testing.T) {
+	steps := &steps_mock{}
+	testee := &wire_protocol_parser{steps}
+
+	arguments := []argument{
+		argument{value: "some", position: 0},
+		argument{value: "value", position: 5},
+		argument{value: "match", position: 14}}
+
+	steps.On("matching_step", mock.Anything).Return("47", true, arguments).Once()
+
+	command := []byte(`["step_matches",{"name_to_match":"some value to match"}]`)
+	response := testee.parse(command)
+
+	expected_response := `["success",[{"id":"47","args":[{"val":"some","pos":0},{"val":"value","pos":5},{"val":"match","pos":14}]}]]`
+
+	assert.Equal(t, expected_response, response)
 
 	steps.Mock.AssertExpectations(t)
 }
