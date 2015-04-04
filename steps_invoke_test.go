@@ -70,7 +70,7 @@ func Test_invoking_a_step_executes_the_defined_action(t *testing.T) {
 	executed := false
 	pattern := "arbitrary step pattern"
 	step := testee.add_step(pattern)
-	step.Do(func(context interface{}, args ...interface{}) {
+	step.Do(func(context interface{}, arguments Arguments) {
 		executed = true
 	})
 	id, _, _ := testee.matching_step(pattern)
@@ -85,7 +85,7 @@ func Test_invoking_a_step_whos_action_does_not_panic_returns_success(t *testing.
 
 	pattern := "arbitrary step pattern"
 	step := testee.add_step(pattern)
-	step.Do(func(context interface{}, args ...interface{}) {
+	step.Do(func(context interface{}, arguments Arguments) {
 	})
 	id, _, _ := testee.matching_step(pattern)
 
@@ -99,7 +99,7 @@ func Test_invoking_a_step_whos_action_panics_returns_fail(t *testing.T) {
 
 	pattern := "arbitrary step pattern"
 	step := testee.add_step(pattern)
-	step.Do(func(context interface{}, args ...interface{}) {
+	step.Do(func(context interface{}, arguments Arguments) {
 		panic("")
 	})
 	id, _, _ := testee.matching_step(pattern)
@@ -115,7 +115,7 @@ func Test_invoking_a_failing_step_returns_the_failure_message(t *testing.T) {
 	expected_message := "error message"
 	pattern := "arbitrary step pattern"
 	step := testee.add_step(pattern)
-	step.Do(func(context interface{}, args ...interface{}) {
+	step.Do(func(context interface{}, arguments Arguments) {
 		panic(expected_message)
 	})
 	id, _, _ := testee.matching_step(pattern)
@@ -139,7 +139,7 @@ func Test_invoke_step_passes_the_context_created_in_begin_scenario(t *testing.T)
 	var actual_context *context_type
 	pattern := "arbitrary step pattern"
 	step := testee.add_step(pattern)
-	step.Do(func(context interface{}, args ...interface{}) {
+	step.Do(func(context interface{}, arguments Arguments) {
 		actual_context = context.(*context_type)
 	})
 	id, _, _ := testee.matching_step(pattern)

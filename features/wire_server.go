@@ -21,7 +21,7 @@ func main() {
 		scenario.testee.Given("a step which passes").Pass()
 		scenario.testee.Given("a step which fails").Fail()
 		scenario.testee.Given("a step with code").Do(
-			func(context interface{}, args ...interface{}) {
+			func(context interface{}, arguments gourd.Arguments) {
 				scenario.executed = true
 			})
 
@@ -29,16 +29,16 @@ func main() {
 	})
 
 	cucumber.Given("a step with pattern \"failure step\" that fails with message \"failure message\"").Do(
-		func(context interface{}, args ...interface{}) {
+		func(context interface{}, arguments gourd.Arguments) {
 			scenario, _ := context.(*gourd_context)
 			scenario.testee.Given("failure step").Do(
-				func(context interface{}, args ...interface{}) {
+				func(context interface{}, arguments gourd.Arguments) {
 					panic("failure message")
 				})
 		})
 
 	cucumber.Given("a go wire server").Do(
-		func(context interface{}, args ...interface{}) {
+		func(context interface{}, arguments gourd.Arguments) {
 			scenario, _ := context.(*gourd_context)
 			scenario.testee.SetPort(2345)
 			go func() {
@@ -47,7 +47,7 @@ func main() {
 		})
 
 	cucumber.Then("the code was executed").Do(
-		func(context interface{}, args ...interface{}) {
+		func(context interface{}, arguments gourd.Arguments) {
 			scenario, _ := context.(*gourd_context)
 			if !scenario.executed {
 				panic("code was not executed")
@@ -55,23 +55,16 @@ func main() {
 		})
 
 	cucumber.Given("step with pattern \"\\^a number \\(\\\\d\\+\\)\\$\"").Do(
-		func(context interface{}, args ...interface{}) {
+		func(context interface{}, arguments gourd.Arguments) {
 			scenario, _ := context.(*gourd_context)
 			scenario.testee.Given("^a number (\\d+)$").Do(
-				func(context interface{}, args ...interface{}) {
-					if len(args) != 1 {
-						panic("number missing")
-					}
-					matched_number, ok := args[0].(int)
-					if !ok {
-						panic("wrong type, not a number")
-					}
-					scenario.matched_number = matched_number
+				func(context interface{}, arguments gourd.Arguments) {
+					scenario.matched_number = arguments.Int(0)
 				})
 		})
 
 	cucumber.Then("number 1234 is passed to the matching step").Do(
-		func(context interface{}, args ...interface{}) {
+		func(context interface{}, arguments gourd.Arguments) {
 			scenario, _ := context.(*gourd_context)
 			if scenario.matched_number != 1234 {
 				panic("did not match expected number")

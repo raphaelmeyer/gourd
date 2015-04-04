@@ -5,7 +5,7 @@ import (
 )
 
 type Step interface {
-	Do(action func(context interface{}, args ...interface{}))
+	Do(action func(context interface{}, arguments Arguments))
 	Pass()
 	Pending()
 	Fail()
@@ -13,15 +13,15 @@ type Step interface {
 
 type gourd_step struct {
 	regex  *regexp.Regexp
-	action func(context interface{}, args ...interface{})
+	action func(context interface{}, arguments Arguments)
 }
 
-func (step *gourd_step) Do(action func(context interface{}, args ...interface{})) {
+func (step *gourd_step) Do(action func(context interface{}, arguments Arguments)) {
 	step.action = action
 }
 
 func (step *gourd_step) Pass() {
-	step.action = func(context interface{}, args ...interface{}) {
+	step.action = func(context interface{}, arguments Arguments) {
 	}
 }
 
@@ -29,7 +29,7 @@ func (step *gourd_step) Pending() {
 }
 
 func (step *gourd_step) Fail() {
-	step.action = func(context interface{}, args ...interface{}) {
+	step.action = func(context interface{}, arguments Arguments) {
 		panic("")
 	}
 }
