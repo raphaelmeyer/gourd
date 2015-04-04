@@ -37,8 +37,12 @@ func (steps *gourd_steps) matching_step(pattern string) (string, bool, []argumen
 		if step.regex.MatchString(pattern) {
 			arguments := []argument{}
 			submatches := step.regex.FindStringSubmatch(pattern)
-			for _ = range submatches {
-				arguments = []argument{argument{value: "42", position: 13}}
+			positions := step.regex.FindStringSubmatchIndex(pattern)
+			for i, submatch := range submatches {
+				if i > 0 {
+					position := uint(positions[2*i])
+					arguments = append(arguments, argument{value: submatch, position: position})
+				}
 			}
 			return id, true, arguments
 		}
