@@ -5,4 +5,5 @@
 * Documentation (godoc)
 * Update gourd example
 * Add "Getting started" (gourd or gourd example?)
+* Escape regex special characters in snippets
 
