@@ -16,7 +16,7 @@ type steps interface {
 	begin_scenario()
 	matching_step(step string) (string, bool, []argument)
 	add_step(pattern string) Step
-	invoke_step(id string) (step_result, string)
+	invoke_step(id string, arguments []string) (step_result, string)
 }
 
 type gourd_steps struct {
@@ -59,7 +59,7 @@ func (steps *gourd_steps) add_step(pattern string) Step {
 	return step
 }
 
-func (steps *gourd_steps) invoke_step(id string) (result step_result, message string) {
+func (steps *gourd_steps) invoke_step(id string, arguments []string) (result step_result, message string) {
 	step, ok := steps.steps[id]
 	if !ok {
 		return fail, ""

@@ -13,7 +13,7 @@ func Test_invoking_a_pending_step_returns_pending(t *testing.T) {
 	step.Pending()
 	id, _, _ := testee.matching_step(pattern)
 
-	result, _ := testee.invoke_step(id)
+	result, _ := testee.invoke_step(id, []string{})
 
 	assert.Equal(t, result, pending)
 }
@@ -25,7 +25,7 @@ func Test_a_step_is_pending_by_default(t *testing.T) {
 	testee.add_step(pattern)
 	id, _, _ := testee.matching_step(pattern)
 
-	result, _ := testee.invoke_step(id)
+	result, _ := testee.invoke_step(id, []string{})
 
 	assert.Equal(t, result, pending)
 }
@@ -38,7 +38,7 @@ func Test_invoking_a_step_that_is_set_to_always_pass_returns_success(t *testing.
 	step.Pass()
 	id, _, _ := testee.matching_step(pattern)
 
-	result, _ := testee.invoke_step(id)
+	result, _ := testee.invoke_step(id, []string{})
 
 	assert.Equal(t, result, success)
 }
@@ -51,7 +51,7 @@ func Test_invoking_a_step_that_is_set_to_always_fail_returns_fail(t *testing.T) 
 	step.Fail()
 	id, _, _ := testee.matching_step(pattern)
 
-	result, _ := testee.invoke_step(id)
+	result, _ := testee.invoke_step(id, []string{})
 
 	assert.Equal(t, result, fail)
 }
@@ -59,7 +59,7 @@ func Test_invoking_a_step_that_is_set_to_always_fail_returns_fail(t *testing.T) 
 func Test_invoking_a_step_with_an_unknown_id_fails(t *testing.T) {
 	testee := &gourd_steps{}
 
-	result, _ := testee.invoke_step("unknown id")
+	result, _ := testee.invoke_step("unknown id", []string{})
 
 	assert.Equal(t, result, fail)
 }
@@ -75,7 +75,7 @@ func Test_invoking_a_step_executes_the_defined_action(t *testing.T) {
 	})
 	id, _, _ := testee.matching_step(pattern)
 
-	testee.invoke_step(id)
+	testee.invoke_step(id, []string{})
 
 	assert.True(t, executed)
 }
@@ -89,7 +89,7 @@ func Test_invoking_a_step_whos_action_does_not_panic_returns_success(t *testing.
 	})
 	id, _, _ := testee.matching_step(pattern)
 
-	result, _ := testee.invoke_step(id)
+	result, _ := testee.invoke_step(id, []string{})
 
 	assert.Equal(t, result, success)
 }
@@ -104,7 +104,7 @@ func Test_invoking_a_step_whos_action_panics_returns_fail(t *testing.T) {
 	})
 	id, _, _ := testee.matching_step(pattern)
 
-	result, _ := testee.invoke_step(id)
+	result, _ := testee.invoke_step(id, []string{})
 
 	assert.Equal(t, result, fail)
 }
@@ -120,7 +120,7 @@ func Test_invoking_a_failing_step_returns_the_failure_message(t *testing.T) {
 	})
 	id, _, _ := testee.matching_step(pattern)
 
-	_, message := testee.invoke_step(id)
+	_, message := testee.invoke_step(id, []string{})
 
 	assert.Equal(t, expected_message, message)
 }
@@ -145,7 +145,7 @@ func Test_invoke_step_passes_the_context_created_in_begin_scenario(t *testing.T)
 	id, _, _ := testee.matching_step(pattern)
 
 	testee.begin_scenario()
-	testee.invoke_step(id)
+	testee.invoke_step(id, []string{})
 
 	assert.Equal(t, expected_context, actual_context)
 	assert.Exactly(t, expected_context, actual_context)
