@@ -151,19 +151,22 @@ func Test_invoke_step_passes_the_context_created_in_begin_scenario(t *testing.T)
 	assert.Exactly(t, expected_context, actual_context)
 }
 
-func Test_invoke_step_passes_arguments_to_the_action(t *testing.T) {
+func Test_passed_arguments_are_initialized_with_the_string_slice(t *testing.T) {
 	testee := &gourd_steps{}
 
 	pattern := "arbitrary step pattern"
 	step := testee.add_step(pattern)
 	id, _, _ := testee.matching_step(pattern)
 
-	args := []string{"some string", "-371", "58"}
+	input := []string{"a b", "1234", "日本語", "\\^\\$"}
 
+	var actual Arguments
 	step.Do(func(context interface{}, arguments Arguments) {
-		assert.Equal(t, "some string", arguments.String(0))
-		assert.Equal(t, -371, arguments.Int(1))
+		actual = arguments
 	})
 
-	testee.invoke_step(id, args)
+	testee.invoke_step(id, input)
+
+	expected := &gourd_arguments{input}
+	assert.Equal(t, expected, actual)
 }
