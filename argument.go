@@ -11,7 +11,7 @@ type gourd_arguments struct {
 }
 
 func (arguments *gourd_arguments) String(index uint) string {
-	return arguments.values[0]
+	return arguments.values[index]
 }
 
 func (arguments *gourd_arguments) Int(index uint) int {
