@@ -165,7 +165,28 @@ func Test_invoke_step_passes_string_arguments_to_the_action(t *testing.T) {
 		assert.Equal(t, "another one", arguments.String(1))
 	})
 
-	testee.invoke_step(id, args)
+	result, _ := testee.invoke_step(id, args)
+
+	assert.NotEqual(t, fail, result)
+}
+
+func Test_invoke_step_passes_integer_arguments_to_the_action(t *testing.T) {
+	testee := &gourd_steps{}
+
+	pattern := "arbitrary step pattern"
+	step := testee.add_step(pattern)
+	id, _, _ := testee.matching_step(pattern)
+
+	args := []string{"123", "-45"}
+
+	step.Do(func(context interface{}, arguments Arguments) {
+		assert.Equal(t, 123, arguments.Int(0))
+		assert.Equal(t, -45, arguments.Int(1))
+	})
+
+	result, _ := testee.invoke_step(id, args)
+
+	assert.NotEqual(t, fail, result)
 }
 
 func Test_invoking_a_step_fails_when_the_step_tries_to_access_an_invalid_argument_index(t *testing.T) {

@@ -1,5 +1,9 @@
 package gourd
 
+import (
+	"strconv"
+)
+
 type Arguments interface {
 	String(index uint) string
 	Int(index uint) int
@@ -15,14 +19,15 @@ func (arguments *gourd_arguments) String(index uint) string {
 }
 
 func (arguments *gourd_arguments) Int(index uint) int {
-	return 0
+	value, _ := strconv.ParseInt(arguments.values[index], 10, 0)
+	return int(value)
 }
 
 func (arguments *gourd_arguments) Uint(index uint) uint {
 	return 0
 }
 
-// TODO is something completly different
+// TODO this is something completely different
 type argument struct {
 	value    string
 	position uint
