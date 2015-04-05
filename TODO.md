@@ -1,5 +1,6 @@
 # TODO list
 
+* Rename struct type argument into submatch or capturing_group or similar
 * Investigate json.Marshal vs string concatenation
 * bufio usage Write vs WriteString etc
 * Documentation (godoc)
