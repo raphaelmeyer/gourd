@@ -233,10 +233,10 @@ func Test_parser_passes_arguments_to_invoked_step(t *testing.T) {
 	steps := &steps_mock{}
 	testee := &wire_protocol_parser{steps}
 
-	expected_arguments := []string{"value"}
+	expected_arguments := []string{"some", "value"}
 	steps.On("invoke_step", mock.Anything, expected_arguments).Return(success, "").Once()
 
-	command := []byte(`["invoke",{"id":"123","args":["value"]}]`)
+	command := []byte(`["invoke",{"id":"123","args":["some","value"]}]`)
 	testee.parse(command)
 
 	steps.Mock.AssertExpectations(t)

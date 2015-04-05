@@ -69,7 +69,12 @@ func (parser *wire_protocol_parser) snippet_text(parameters interface{}) string 
 func (parser *wire_protocol_parser) invoke(parameters interface{}) string {
 	invoke := parameters.(map[string]interface{})
 	id := invoke["id"].(string)
-	result, message := parser.steps.invoke_step(id, []string{"value"})
+	args := invoke["args"].([]interface{})
+	arguments := make([]string, len(args))
+	for i, argument := range args {
+		arguments[i] = argument.(string)
+	}
+	result, message := parser.steps.invoke_step(id, arguments)
 	switch result {
 	case fail:
 		return `["fail",{"message":"` + message + `"}]`
