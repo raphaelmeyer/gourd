@@ -20,7 +20,7 @@ func (arguments *gourd_arguments) String(index uint) string {
 func (arguments *gourd_arguments) Int(index uint) int {
 	value, err := strconv.ParseInt(arguments.values[index], 10, 0)
 	if err != nil {
-		panic("Not a number")
+		panic(err.Error())
 	}
 	return int(value)
 }
