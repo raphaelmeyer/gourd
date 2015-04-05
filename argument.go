@@ -7,10 +7,11 @@ type Arguments interface {
 }
 
 type gourd_arguments struct {
+	values []string
 }
 
 func (arguments *gourd_arguments) String(index uint) string {
-	return ""
+	return arguments.values[0]
 }
 
 func (arguments *gourd_arguments) Int(index uint) int {
@@ -21,6 +22,7 @@ func (arguments *gourd_arguments) Uint(index uint) uint {
 	return 0
 }
 
+// TODO is something completly different
 type argument struct {
 	value    string
 	position uint

@@ -76,7 +76,7 @@ func (steps *gourd_steps) invoke_step(id string, arguments []string) (result ste
 		}
 	}()
 
-	step.action(steps.context, &gourd_arguments{})
+	step.action(steps.context, &gourd_arguments{arguments})
 
 	return success, ""
 }
