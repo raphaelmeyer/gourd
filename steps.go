@@ -72,7 +72,7 @@ func (steps *gourd_steps) invoke_step(id string, arguments []string) (result ste
 	defer func() {
 		if err := recover(); err != nil {
 			result = fail
-			message = err.(string)
+			message = fmt.Sprintf("%v", err)
 		}
 	}()
 
