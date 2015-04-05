@@ -38,11 +38,26 @@ func Test_access_integer_arguemnts(t *testing.T) {
 }
 
 func Test_arguments_can_be_accessed_multiple_times(t *testing.T) {
+	input := []string{"some string", "-71"}
+	testee := &gourd_arguments{input}
+
+	assert.Equal(t, -71, testee.Int(1))
+	assert.Equal(t, -71, testee.Int(1))
 }
 
 func Test_access_order_does_not_matter(t *testing.T) {
+	input := []string{"something", "6273"}
+	testee := &gourd_arguments{input}
+
+	assert.Equal(t, 6273, testee.Int(1))
+	assert.Equal(t, "something", testee.String(0))
 }
 
 func Test_panics_if_argument_cannot_be_converted_into_an_integer(t *testing.T) {
+	testee := &gourd_arguments{[]string{"not a number"}}
+
+	assert.Panics(t, func(){
+		testee.Int(0)
+	})
 }
 
