@@ -37,9 +37,6 @@ func Test_access_integer_arguemnts(t *testing.T) {
 	assert.Equal(t, -45, testee.Int(1))
 }
 
-func Test_access_unsigned_integer_arguemnts(t *testing.T) {
-}
-
 func Test_arguments_can_be_accessed_multiple_times(t *testing.T) {
 }
 

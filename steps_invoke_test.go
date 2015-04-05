@@ -163,7 +163,6 @@ func Test_invoke_step_passes_arguments_to_the_action(t *testing.T) {
 	step.Do(func(context interface{}, arguments Arguments) {
 		assert.Equal(t, "some string", arguments.String(0))
 		assert.Equal(t, -371, arguments.Int(1))
-//		assert.Equal(t, 58, arguments.Uint(2))
 	})
 
 	testee.invoke_step(id, args)
