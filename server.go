@@ -25,7 +25,7 @@ func (server *gourd_wire_server) listen(port uint) {
 		panic(err)
 	}
 	defer listener.Close()
-	fmt.Println("Listening on port", port)
+	// fmt.Println("Listening on port", port)
 
 	conn, err := listener.Accept()
 	if err != nil {
@@ -37,7 +37,10 @@ func (server *gourd_wire_server) listen(port uint) {
 	for scanner.Scan() {
 		command := scanner.Bytes()
 
+		//fmt.Printf("%d:  < %q\n", port, command)
 		response := server.parser.parse(command)
+		//fmt.Printf("%d: >  %q\n", port, response)
+
 		writer := bufio.NewWriter(conn)
 		writer.WriteString(response + "\n")
 		writer.Flush()
