@@ -24,9 +24,3 @@ func (arguments *gourd_arguments) Int(index uint) int {
 	}
 	return int(value)
 }
-
-// TODO this is something completely different
-type argument struct {
-	value    string
-	position uint
-}

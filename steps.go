@@ -14,9 +14,14 @@ const (
 
 type steps interface {
 	begin_scenario()
-	matching_step(step string) (string, bool, []argument)
+	matching_step(step string) (string, bool, []capturing_group)
 	add_step(pattern string) Step
 	invoke_step(id string, arguments []string) (step_result, string)
+}
+
+type capturing_group struct {
+	value    string
+	position uint
 }
 
 type gourd_steps struct {
@@ -32,22 +37,22 @@ func (steps *gourd_steps) begin_scenario() {
 	}
 }
 
-func (steps *gourd_steps) matching_step(pattern string) (string, bool, []argument) {
+func (steps *gourd_steps) matching_step(pattern string) (string, bool, []capturing_group) {
 	for id, step := range steps.steps {
 		if step.regex.MatchString(pattern) {
-			arguments := []argument{}
+			arguments := []capturing_group{}
 			submatches := step.regex.FindStringSubmatch(pattern)
 			positions := step.regex.FindStringSubmatchIndex(pattern)
 			for i, submatch := range submatches {
 				if i > 0 {
 					position := uint(positions[2*i])
-					arguments = append(arguments, argument{value: submatch, position: position})
+					arguments = append(arguments, capturing_group{value: submatch, position: position})
 				}
 			}
 			return id, true, arguments
 		}
 	}
-	return "", false, []argument{}
+	return "", false, []capturing_group{}
 }
 
 func (steps *gourd_steps) add_step(pattern string) Step {

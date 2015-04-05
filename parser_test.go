@@ -44,7 +44,7 @@ func Test_parser_asks_for_matching_step_with_given_pattern(t *testing.T) {
 	testee := &wire_protocol_parser{steps}
 
 	pattern := "Given pattern"
-	steps.On("matching_step", pattern).Return("", false, []argument{}).Once()
+	steps.On("matching_step", pattern).Return("", false, []capturing_group{}).Once()
 
 	command := []byte(`["step_matches",{"name_to_match":"` + pattern + `"}]`)
 	testee.parse(command)
@@ -56,7 +56,7 @@ func Test_parser_returns_success_and_empty_array_for_undefined_step(t *testing.T
 	steps := &steps_mock{}
 	testee := &wire_protocol_parser{steps}
 
-	steps.On("matching_step", mock.Anything).Return("", false, []argument{}).Once()
+	steps.On("matching_step", mock.Anything).Return("", false, []capturing_group{}).Once()
 
 	command := []byte(`["step_matches",{"name_to_match":"undefined step"}]`)
 	response := testee.parse(command)
@@ -70,7 +70,7 @@ func Test_parser_returns_success_and_id_for_defined_step(t *testing.T) {
 
 	id := "123"
 	pattern := "defined step"
-	steps.On("matching_step", pattern).Return(id, true, []argument{}).Once()
+	steps.On("matching_step", pattern).Return(id, true, []capturing_group{}).Once()
 
 	command := []byte(`["step_matches",{"name_to_match":"` + pattern + `"}]`)
 	response := testee.parse(command)
@@ -199,8 +199,8 @@ func Test_parser_returns_a_capturing_group_as_an_argument(t *testing.T) {
 	steps := &steps_mock{}
 	testee := &wire_protocol_parser{steps}
 
-	arguments := []argument{
-		argument{value: "value", position: 5}}
+	arguments := []capturing_group{
+		capturing_group{value: "value", position: 5}}
 
 	steps.On("matching_step", mock.Anything).Return("47", true, arguments).Once()
 
@@ -215,10 +215,10 @@ func Test_parser_returns_all_capturing_groups_as_arguments(t *testing.T) {
 	steps := &steps_mock{}
 	testee := &wire_protocol_parser{steps}
 
-	arguments := []argument{
-		argument{value: "some", position: 0},
-		argument{value: "value", position: 5},
-		argument{value: "match", position: 14}}
+	arguments := []capturing_group{
+		capturing_group{value: "some", position: 0},
+		capturing_group{value: "value", position: 5},
+		capturing_group{value: "match", position: 14}}
 
 	steps.On("matching_step", mock.Anything).Return("47", true, arguments).Once()
 

@@ -79,8 +79,8 @@ func Test_a_capturing_group_is_returned_with_value_and_position(t *testing.T) {
 
 	_, _, arguments := testee.matching_step("match number 42")
 
-	expected := []argument{
-		argument{value: "42", position: 13}}
+	expected := []capturing_group{
+		capturing_group{value: "42", position: 13}}
 
 	assert.Equal(t, expected, arguments)
 }
