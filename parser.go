@@ -45,15 +45,8 @@ func (parser *wire_protocol_parser) step_matches(parameters interface{}) string 
 	pattern := parameters.(map[string]interface{})["name_to_match"].(string)
 	id, matches, arguments := parser.steps.matching_step(pattern)
 	if matches {
-		args_string := ""
-		for i, argument := range arguments {
-			if i > 0 {
-				args_string += ","
-			}
-			position := fmt.Sprintf("%d", argument.position)
-			args_string += `{"val":"` + argument.value + `","pos":` + position + `}`
-		}
-		return `["success",[{"id":"` + id + `","args":[` + args_string + `]}]]`
+		arguments_string := build_arguments_string(arguments)
+		return `["success",[{"id":"` + id + `","args":[` + arguments_string + `]}]]`
 	}
 	return `["success",[]]`
 }
@@ -87,4 +80,16 @@ func (parser *wire_protocol_parser) invoke(parameters interface{}) string {
 func (parser *wire_protocol_parser) begin_scenario() string {
 	parser.steps.begin_scenario()
 	return `["success"]`
+}
+
+func build_arguments_string(arguments []capturing_group) string {
+	arguments_string := ""
+	for i, argument := range arguments {
+		if i > 0 {
+			arguments_string += ","
+		}
+		position := fmt.Sprintf("%d", argument.position)
+		arguments_string += `{"val":"` + argument.value + `","pos":` + position + `}`
+	}
+	return arguments_string
 }
