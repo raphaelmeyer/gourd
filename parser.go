@@ -35,7 +35,7 @@ func (parser *wire_protocol_parser) evaluate(request string, command []json.RawM
 	case "begin_scenario":
 		return parser.begin_scenario()
 	case "end_scenario":
-		return `["success"]`
+		return parser.end_scenario()
 	case "snippet_text":
 		return parser.snippet_text(command[1])
 	case "invoke":
@@ -84,6 +84,10 @@ func (parser *wire_protocol_parser) invoke(parameters json.RawMessage) string {
 
 func (parser *wire_protocol_parser) begin_scenario() string {
 	parser.steps.begin_scenario()
+	return `["success"]`
+}
+
+func (parser *wire_protocol_parser) end_scenario() string {
 	return `["success"]`
 }
 
