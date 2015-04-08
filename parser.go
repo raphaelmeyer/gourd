@@ -25,7 +25,10 @@ func (parser *wire_protocol_parser) parse(command []byte) string {
 }
 
 func (parser *wire_protocol_parser) evaluate(command []interface{}) string {
-	request := command[0].(string)
+	request, ok := command[0].(string)
+	if !ok {
+		return `["fail",{"message":"invalid command"}]`
+	}
 	switch request {
 	case "step_matches":
 		return parser.step_matches(command[1])

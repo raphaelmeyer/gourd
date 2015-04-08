@@ -195,6 +195,15 @@ func Test_parser_returns_fail_when_the_command_is_malformed_json(t *testing.T) {
 	assert.Equal(t, expected_response, response)
 }
 
+func Test_parser_returns_fail_when_the_message_is_not_wire_command(t *testing.T) {
+	testee := &wire_protocol_parser{}
+
+	response := testee.parse([]byte(`[123]`))
+
+	expected_response := `["fail",{"message":"invalid command"}]`
+	assert.Equal(t, expected_response, response)
+}
+
 func Test_parser_returns_a_capturing_group_as_an_argument(t *testing.T) {
 	steps := &steps_mock{}
 	testee := &wire_protocol_parser{steps}
