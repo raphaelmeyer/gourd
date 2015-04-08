@@ -15,22 +15,20 @@ type wire_protocol_parser struct {
 }
 
 func (parser *wire_protocol_parser) parse(command []byte) string {
-	var data []interface{}
-
-	err := json.Unmarshal(command, &data)
-	if err != nil {
+	var data []json.RawMessage
+	if err := json.Unmarshal(command, &data); err != nil {
 		return `["fail",{"message":"invalid command"}]`
 	}
 
-	request, ok := data[0].(string)
-	if !ok {
+	var request string
+	if err := json.Unmarshal(data[0], &request); err != nil {
 		return `["fail",{"message":"invalid command"}]`
 	}
 
 	return parser.evaluate(request, data)
 }
 
-func (parser *wire_protocol_parser) evaluate(request string, command []interface{}) string {
+func (parser *wire_protocol_parser) evaluate(request string, command []json.RawMessage) string {
 	switch request {
 	case "step_matches":
 		return parser.step_matches(command[1])
@@ -46,8 +44,10 @@ func (parser *wire_protocol_parser) evaluate(request string, command []interface
 	return `["fail",{"message":"unknown command: ` + request + `"}]`
 }
 
-func (parser *wire_protocol_parser) step_matches(parameters interface{}) string {
-	pattern := parameters.(map[string]interface{})["name_to_match"].(string)
+func (parser *wire_protocol_parser) step_matches(parameters json.RawMessage) string {
+	var patterns map[string]string
+	json.Unmarshal(parameters, &patterns)
+	pattern := patterns["name_to_match"]
 	id, matches, arguments := parser.steps.matching_step(pattern)
 	if matches {
 		arguments_string := build_arguments_string(arguments)
@@ -56,22 +56,22 @@ func (parser *wire_protocol_parser) step_matches(parameters interface{}) string 
 	return `["success",[]]`
 }
 
-func (parser *wire_protocol_parser) snippet_text(parameters interface{}) string {
-	snippet := parameters.(map[string]interface{})
-	name := strings.Replace(snippet["step_name"].(string), "\"", "\\\"", -1)
-	keyword := snippet["step_keyword"].(string)
+func (parser *wire_protocol_parser) snippet_text(parameters json.RawMessage) string {
+	var snippet map[string]string
+	json.Unmarshal(parameters, &snippet)
+	name := strings.Replace(snippet["step_name"], "\"", "\\\"", -1)
+	keyword := snippet["step_keyword"]
 	snippet_text, _ := json.Marshal(`cucumber.` + keyword + `("` + name + `").Pending()`)
 	return `["success",` + string(snippet_text) + `]`
 }
 
-func (parser *wire_protocol_parser) invoke(parameters interface{}) string {
-	invoke := parameters.(map[string]interface{})
-	id := invoke["id"].(string)
-	args := invoke["args"].([]interface{})
-	arguments := make([]string, len(args))
-	for i, argument := range args {
-		arguments[i] = argument.(string)
-	}
+func (parser *wire_protocol_parser) invoke(parameters json.RawMessage) string {
+	var invoke map[string]json.RawMessage
+	json.Unmarshal(parameters, &invoke)
+	var id string
+	json.Unmarshal(invoke["id"], &id)
+	var arguments []string
+	json.Unmarshal(invoke["args"], &arguments)
 	result, message := parser.steps.invoke_step(id, arguments)
 	switch result {
 	case fail:
