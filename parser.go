@@ -22,7 +22,7 @@ func (parser *wire_protocol_parser) parse(command []byte) string {
 
 	var request string
 	if err := json.Unmarshal(data[0], &request); err != nil {
-		return `["fail",{"message":"invalid command"}]`
+		return fail_response("invalid command")
 	}
 
 	return parser.evaluate(request, data)
@@ -41,7 +41,7 @@ func (parser *wire_protocol_parser) evaluate(request string, command []json.RawM
 	case "invoke":
 		return parser.invoke(command[1])
 	}
-	return `["fail",{"message":"unknown command: ` + request + `"}]`
+	return fail_response("unknown command: " + request)
 }
 
 func (parser *wire_protocol_parser) step_matches(parameters json.RawMessage) string {
@@ -75,7 +75,7 @@ func (parser *wire_protocol_parser) invoke(parameters json.RawMessage) string {
 	result, message := parser.steps.invoke_step(id, arguments)
 	switch result {
 	case fail:
-		return `["fail",{"message":"` + message + `"}]`
+		return fail_response(message)
 	case pending:
 		return `["pending"]`
 	}
