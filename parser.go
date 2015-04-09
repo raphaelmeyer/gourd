@@ -17,7 +17,7 @@ type wire_protocol_parser struct {
 func (parser *wire_protocol_parser) parse(command []byte) string {
 	var data []json.RawMessage
 	if err := json.Unmarshal(command, &data); err != nil {
-		return `["fail",{"message":"invalid command"}]`
+		return fail_response("invalid command")
 	}
 
 	var request string
@@ -101,4 +101,8 @@ func build_arguments_string(arguments []capturing_group) string {
 		arguments_string += `{"val":"` + argument.value + `","pos":` + position + `}`
 	}
 	return arguments_string
+}
+
+func fail_response(message string) string {
+	return `["fail",{"message":"` + message + `"}]`
 }
