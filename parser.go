@@ -15,17 +15,17 @@ type wire_protocol_parser struct {
 }
 
 func (parser *wire_protocol_parser) parse(command []byte) string {
-	var data []json.RawMessage
-	if err := json.Unmarshal(command, &data); err != nil {
+	var raw_command []json.RawMessage
+	if err := json.Unmarshal(command, &raw_command); err != nil {
 		return fail_response("invalid command")
 	}
 
 	var request string
-	if err := json.Unmarshal(data[0], &request); err != nil {
+	if err := json.Unmarshal(raw_command[0], &request); err != nil {
 		return fail_response("invalid command")
 	}
 
-	return parser.evaluate(request, data)
+	return parser.evaluate(request, raw_command)
 }
 
 func (parser *wire_protocol_parser) evaluate(request string, command []json.RawMessage) string {
