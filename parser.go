@@ -50,8 +50,7 @@ func (parser *wire_protocol_parser) step_matches(parameters json.RawMessage) str
 	pattern := patterns["name_to_match"]
 	id, matches, arguments := parser.steps.matching_step(pattern)
 	if matches {
-		arguments_string := build_arguments_string(arguments)
-		return `["success",[{"id":"` + id + `","args":[` + arguments_string + `]}]]`
+		return success_response_steps(id, arguments)
 	}
 	return `["success",[]]`
 }
@@ -106,3 +105,9 @@ func build_arguments_string(arguments []capturing_group) string {
 func fail_response(message string) string {
 	return `["fail",{"message":"` + message + `"}]`
 }
+
+func success_response_steps(id string, arguments []capturing_group) string {
+	arguments_string := build_arguments_string(arguments)
+	return `["success",[{"id":"` + id + `","args":[` + arguments_string + `]}]]`
+}
+
