@@ -58,10 +58,7 @@ func (parser *wire_protocol_parser) step_matches(parameters json.RawMessage) str
 func (parser *wire_protocol_parser) snippet_text(parameters json.RawMessage) string {
 	var snippet map[string]string
 	json.Unmarshal(parameters, &snippet)
-	name := strings.Replace(snippet["step_name"], "\"", "\\\"", -1)
-	keyword := snippet["step_keyword"]
-	snippet_text, _ := json.Marshal(`cucumber.` + keyword + `("` + name + `").Pending()`)
-	return `["success",` + string(snippet_text) + `]`
+	return success_response_snippet(snippet["step_name"], snippet["step_keyword"])
 }
 
 func (parser *wire_protocol_parser) invoke(parameters json.RawMessage) string {
@@ -111,3 +108,8 @@ func success_response_steps(id string, arguments []capturing_group) string {
 	return `["success",[{"id":"` + id + `","args":[` + arguments_string + `]}]]`
 }
 
+func success_response_snippet(name string, keyword string) string {
+	escaped_name := strings.Replace(name, "\"", "\\\"", -1)
+	snippet_text, _ := json.Marshal(`cucumber.` + keyword + `("` + escaped_name + `").Pending()`)
+	return `["success",` + string(snippet_text) + `]`
+}
