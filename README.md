@@ -1,6 +1,6 @@
 # gourd
 
-A go wire server for [cucumber](https://cukes.info/)
+A [cucumber](https://cukes.info/) wire server in go
 
 ## Status
 
