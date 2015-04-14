@@ -99,12 +99,16 @@ func build_arguments_string(arguments []capturing_group) string {
 	return arguments_string
 }
 
-func fail_response(message string) string {
-	return `["fail",{"message":"` + message + `"}]`
+func wire_response(status string) []interface{} {
+	return []interface{}{status}
 }
 
 func wire_success() []interface{} {
-	return []interface{}{"success"}
+	return wire_response("success")
+}
+
+func fail_response(message string) string {
+	return `["fail",{"message":"` + message + `"}]`
 }
 
 func success_response_steps(id string, arguments []capturing_group) string {
