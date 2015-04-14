@@ -107,8 +107,14 @@ func wire_success() []interface{} {
 	return wire_response("success")
 }
 
+func wire_fail() []interface{} {
+	return wire_response("fail")
+}
+
 func fail_response(message string) string {
-	return `["fail",{"message":"` + message + `"}]`
+	response := append(wire_fail(), map[string]string{"message" : message})
+	encoded, _ := json.Marshal(response)
+	return string(encoded)
 }
 
 func success_response_steps(id string, arguments []capturing_group) string {
