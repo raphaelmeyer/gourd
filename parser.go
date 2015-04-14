@@ -103,6 +103,10 @@ func fail_response(message string) string {
 	return `["fail",{"message":"` + message + `"}]`
 }
 
+func wire_success() []interface{} {
+	return []interface{}{"success"}
+}
+
 func success_response_steps(id string, arguments []capturing_group) string {
 	arguments_string := build_arguments_string(arguments)
 	return `["success",[{"id":"` + id + `","args":[` + arguments_string + `]}]]`
@@ -110,6 +114,10 @@ func success_response_steps(id string, arguments []capturing_group) string {
 
 func success_response_snippet(name string, keyword string) string {
 	escaped_name := strings.Replace(name, "\"", "\\\"", -1)
-	snippet_text, _ := json.Marshal(`cucumber.` + keyword + `("` + escaped_name + `").Pending()`)
-	return `["success",` + string(snippet_text) + `]`
+	snippet_text := `cucumber.` + keyword + `("` + escaped_name + `").Pending()`
+
+	response := append(wire_success(), snippet_text)
+
+	encoded, _ := json.Marshal(response)
+	return string(encoded)
 }
