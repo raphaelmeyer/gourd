@@ -111,10 +111,14 @@ func wire_fail() []interface{} {
 	return wire_response("fail")
 }
 
-func fail_response(message string) string {
-	response := append(wire_fail(), map[string]string{"message" : message})
+func encode_json(response []interface{}) string {
 	encoded, _ := json.Marshal(response)
 	return string(encoded)
+}
+
+func fail_response(message string) string {
+	response := append(wire_fail(), map[string]string{"message" : message})
+	return encode_json(response)
 }
 
 func success_response_steps(id string, arguments []capturing_group) string {
@@ -128,6 +132,5 @@ func success_response_snippet(name string, keyword string) string {
 
 	response := append(wire_success(), snippet_text)
 
-	encoded, _ := json.Marshal(response)
-	return string(encoded)
+	return encode_json(response)
 }
