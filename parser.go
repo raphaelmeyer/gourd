@@ -2,7 +2,6 @@ package gourd
 
 import (
 	"encoding/json"
-	"fmt"
 	"strings"
 )
 
@@ -87,18 +86,6 @@ func (parser *wire_protocol_parser) end_scenario() string {
 	return `["success"]`
 }
 
-func build_arguments_string(arguments []capturing_group) string {
-	arguments_string := ""
-	for i, argument := range arguments {
-		if i > 0 {
-			arguments_string += ","
-		}
-		position := fmt.Sprintf("%d", argument.position)
-		arguments_string += `{"val":"` + argument.value + `","pos":` + position + `}`
-	}
-	return arguments_string
-}
-
 func wire_response(status string) []interface{} {
 	return []interface{}{status}
 }
@@ -117,13 +104,30 @@ func encode_json(response []interface{}) string {
 }
 
 func fail_response(message string) string {
-	response := append(wire_fail(), map[string]string{"message" : message})
+	response := append(wire_fail(), map[string]string{"message": message})
 	return encode_json(response)
 }
 
 func success_response_steps(id string, arguments []capturing_group) string {
-	arguments_string := build_arguments_string(arguments)
-	return `["success",[{"id":"` + id + `","args":[` + arguments_string + `]}]]`
+
+	type wire_argument struct {
+		Value     string `json:"val"`
+		Positions uint   `json:"pos"`
+	}
+
+	type wire_match struct {
+		Id   string          `json:"id"`
+		Args []wire_argument `json:"args"`
+	}
+
+	args := []wire_argument{}
+	for _, argument := range arguments {
+		args = append(args, wire_argument{argument.value, argument.position})
+	}
+
+	match := wire_match{id, args}
+	response := append(wire_success(), []wire_match{match})
+	return encode_json(response)
 }
 
 func success_response_snippet(name string, keyword string) string {
