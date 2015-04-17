@@ -72,7 +72,7 @@ func (parser *wire_protocol_parser) invoke(parameters json.RawMessage) string {
 	case fail:
 		return fail_response(message)
 	case pending:
-		return `["pending"]`
+		return pending_response()
 	}
 	return `["success"]`
 }
@@ -100,6 +100,11 @@ func wire_fail() []interface{} {
 
 func encode_json(response []interface{}) string {
 	encoded, _ := json.Marshal(response)
+	return string(encoded)
+}
+
+func pending_response() string {
+	encoded, _ := json.Marshal(wire_response("pending"))
 	return string(encoded)
 }
 
