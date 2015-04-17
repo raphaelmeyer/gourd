@@ -51,7 +51,7 @@ func (parser *wire_protocol_parser) step_matches(parameters json.RawMessage) str
 	if matches {
 		return success_response_steps(id, arguments)
 	}
-	return `["success",[]]`
+	return success_response_no_match()
 }
 
 func (parser *wire_protocol_parser) snippet_text(parameters json.RawMessage) string {
@@ -74,16 +74,16 @@ func (parser *wire_protocol_parser) invoke(parameters json.RawMessage) string {
 	case pending:
 		return pending_response()
 	}
-	return `["success"]`
+	return success_response()
 }
 
 func (parser *wire_protocol_parser) begin_scenario() string {
 	parser.steps.begin_scenario()
-	return `["success"]`
+	return success_response()
 }
 
 func (parser *wire_protocol_parser) end_scenario() string {
-	return `["success"]`
+	return success_response()
 }
 
 func wire_response(status string) []interface{} {
@@ -92,6 +92,10 @@ func wire_response(status string) []interface{} {
 
 func wire_success() []interface{} {
 	return wire_response("success")
+}
+
+func wire_pending() []interface{} {
+	return wire_response("pending")
 }
 
 func wire_fail() []interface{} {
@@ -104,13 +108,18 @@ func encode_json(response []interface{}) string {
 }
 
 func pending_response() string {
-	encoded, _ := json.Marshal(wire_response("pending"))
+	encoded, _ := json.Marshal(wire_pending())
 	return string(encoded)
 }
 
 func fail_response(message string) string {
 	response := append(wire_fail(), map[string]string{"message": message})
 	return encode_json(response)
+}
+
+func success_response() string {
+	encoded, _ := json.Marshal(wire_success())
+	return string(encoded)
 }
 
 func success_response_steps(id string, arguments []capturing_group) string {
@@ -132,6 +141,11 @@ func success_response_steps(id string, arguments []capturing_group) string {
 
 	match := wire_match{id, args}
 	response := append(wire_success(), []wire_match{match})
+	return encode_json(response)
+}
+
+func success_response_no_match() string {
+	response := append(wire_success(), []interface{}{})
 	return encode_json(response)
 }
 
