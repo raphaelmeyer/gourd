@@ -107,19 +107,8 @@ func encode_json(response []interface{}) string {
 	return string(encoded)
 }
 
-func pending_response() string {
-	encoded, _ := json.Marshal(wire_pending())
-	return string(encoded)
-}
-
-func fail_response(message string) string {
-	response := append(wire_fail(), map[string]string{"message": message})
-	return encode_json(response)
-}
-
 func success_response() string {
-	encoded, _ := json.Marshal(wire_success())
-	return string(encoded)
+	return encode_json(wire_success())
 }
 
 func success_response_steps(id string, arguments []capturing_group) string {
@@ -155,5 +144,14 @@ func success_response_snippet(name string, keyword string) string {
 
 	response := append(wire_success(), snippet_text)
 
+	return encode_json(response)
+}
+
+func pending_response() string {
+	return encode_json(wire_pending())
+}
+
+func fail_response(message string) string {
+	response := append(wire_fail(), map[string]string{"message": message})
 	return encode_json(response)
 }
