@@ -14,6 +14,11 @@ type wire_protocol_parser struct {
 }
 
 func (parser *wire_protocol_parser) parse(command []byte) string {
+	raw_response := parser.parse_command(command)
+	return encode_json(raw_response)
+}
+
+func (parser *wire_protocol_parser) parse_command(command []byte) []interface{} {
 	var raw_command []json.RawMessage
 	if err := json.Unmarshal(command, &raw_command); err != nil {
 		return fail_response("invalid command")
@@ -27,7 +32,7 @@ func (parser *wire_protocol_parser) parse(command []byte) string {
 	return parser.evaluate(request, raw_command)
 }
 
-func (parser *wire_protocol_parser) evaluate(request string, command []json.RawMessage) string {
+func (parser *wire_protocol_parser) evaluate(request string, command []json.RawMessage) []interface{} {
 	switch request {
 	case "step_matches":
 		return parser.step_matches(command[1])
@@ -43,7 +48,7 @@ func (parser *wire_protocol_parser) evaluate(request string, command []json.RawM
 	return fail_response("unknown command: " + request)
 }
 
-func (parser *wire_protocol_parser) step_matches(parameters json.RawMessage) string {
+func (parser *wire_protocol_parser) step_matches(parameters json.RawMessage) []interface{} {
 	var patterns map[string]string
 	json.Unmarshal(parameters, &patterns)
 	pattern := patterns["name_to_match"]
@@ -54,13 +59,13 @@ func (parser *wire_protocol_parser) step_matches(parameters json.RawMessage) str
 	return success_response_no_match()
 }
 
-func (parser *wire_protocol_parser) snippet_text(parameters json.RawMessage) string {
+func (parser *wire_protocol_parser) snippet_text(parameters json.RawMessage) []interface{} {
 	var snippet map[string]string
 	json.Unmarshal(parameters, &snippet)
 	return success_response_snippet(snippet["step_name"], snippet["step_keyword"])
 }
 
-func (parser *wire_protocol_parser) invoke(parameters json.RawMessage) string {
+func (parser *wire_protocol_parser) invoke(parameters json.RawMessage) []interface{} {
 	var invoke map[string]json.RawMessage
 	json.Unmarshal(parameters, &invoke)
 	var id string
@@ -77,12 +82,12 @@ func (parser *wire_protocol_parser) invoke(parameters json.RawMessage) string {
 	return success_response()
 }
 
-func (parser *wire_protocol_parser) begin_scenario() string {
+func (parser *wire_protocol_parser) begin_scenario() []interface{} {
 	parser.steps.begin_scenario()
 	return success_response()
 }
 
-func (parser *wire_protocol_parser) end_scenario() string {
+func (parser *wire_protocol_parser) end_scenario() []interface{} {
 	return success_response()
 }
 
@@ -107,11 +112,11 @@ func encode_json(response []interface{}) string {
 	return string(encoded)
 }
 
-func success_response() string {
-	return encode_json(wire_success())
+func success_response() []interface{} {
+	return wire_success()
 }
 
-func success_response_steps(id string, arguments []capturing_group) string {
+func success_response_steps(id string, arguments []capturing_group) []interface{} {
 
 	type wire_argument struct {
 		Value     string `json:"val"`
@@ -130,28 +135,29 @@ func success_response_steps(id string, arguments []capturing_group) string {
 
 	match := wire_match{id, args}
 	response := append(wire_success(), []wire_match{match})
-	return encode_json(response)
+
+	return response
 }
 
-func success_response_no_match() string {
+func success_response_no_match() []interface{} {
 	response := append(wire_success(), []interface{}{})
-	return encode_json(response)
+	return response
 }
 
-func success_response_snippet(name string, keyword string) string {
+func success_response_snippet(name string, keyword string) []interface{} {
 	escaped_name := strings.Replace(name, "\"", "\\\"", -1)
 	snippet_text := `cucumber.` + keyword + `("` + escaped_name + `").Pending()`
 
 	response := append(wire_success(), snippet_text)
 
-	return encode_json(response)
+	return response
 }
 
-func pending_response() string {
-	return encode_json(wire_pending())
+func pending_response() []interface{} {
+	return wire_pending()
 }
 
-func fail_response(message string) string {
+func fail_response(message string) []interface{} {
 	response := append(wire_fail(), map[string]string{"message": message})
-	return encode_json(response)
+	return response
 }
