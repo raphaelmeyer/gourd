@@ -13,7 +13,35 @@ type wire_protocol_parser struct {
 	steps steps
 }
 
+type wire_response_ interface {
+	encode() string
+}
+
+type wire_command_ interface {
+	execute() wire_response_
+}
+
+type generic_wire_command struct{}
+type generic_wire_response struct{}
+
+func (cmd *generic_wire_command) execute() wire_response_ {
+	return &generic_wire_response{}
+}
+
+func (response *generic_wire_response) encode() string {
+	return ""
+}
+
+func parse_wire_command(command []byte) wire_command_ {
+	return &generic_wire_command{}
+}
+
 func (parser *wire_protocol_parser) parse(command []byte) string {
+
+	cmd := parse_wire_command(command)
+	response := cmd.execute()
+	_ = response.encode()
+
 	raw_response := parser.parse_command(command)
 	return encode_json(raw_response)
 }
