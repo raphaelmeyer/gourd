@@ -13,14 +13,6 @@ type wire_protocol_parser struct {
 	steps steps
 }
 
-func (cmd *generic_wire_command) execute() wire_response {
-	return &generic_wire_response{}
-}
-
-func (response *generic_wire_response) encode() string {
-	return ""
-}
-
 func (parser *wire_protocol_parser) parse(command []byte) string {
 
 	cmd := parse_wire_command(command)
