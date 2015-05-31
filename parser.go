@@ -13,27 +13,12 @@ type wire_protocol_parser struct {
 	steps steps
 }
 
-type wire_response_ interface {
-	encode() string
-}
-
-type wire_command_ interface {
-	execute() wire_response_
-}
-
-type generic_wire_command struct{}
-type generic_wire_response struct{}
-
-func (cmd *generic_wire_command) execute() wire_response_ {
+func (cmd *generic_wire_command) execute() wire_response {
 	return &generic_wire_response{}
 }
 
 func (response *generic_wire_response) encode() string {
 	return ""
-}
-
-func parse_wire_command(command []byte) wire_command_ {
-	return &generic_wire_command{}
 }
 
 func (parser *wire_protocol_parser) parse(command []byte) string {
@@ -119,20 +104,20 @@ func (parser *wire_protocol_parser) end_scenario() []interface{} {
 	return success_response()
 }
 
-func wire_response(status string) []interface{} {
+func wire_response_(status string) []interface{} {
 	return []interface{}{status}
 }
 
 func wire_success() []interface{} {
-	return wire_response("success")
+	return wire_response_("success")
 }
 
 func wire_pending() []interface{} {
-	return wire_response("pending")
+	return wire_response_("pending")
 }
 
 func wire_fail() []interface{} {
-	return wire_response("fail")
+	return wire_response_("fail")
 }
 
 func encode_json(response []interface{}) string {
