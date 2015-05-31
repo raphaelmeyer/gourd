@@ -16,4 +16,3 @@ func Test_command_parser_parses_begin_scenario_command(t *testing.T) {
 	expected := &wire_command_begin_scenario{}
 	assert.IsType(t, expected, command)
 }
-

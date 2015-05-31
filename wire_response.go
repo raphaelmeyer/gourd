@@ -13,4 +13,3 @@ func (response *generic_wire_response) encode() string {
 type command_parser interface {
 	parse() wire_command
 }
-
