@@ -15,9 +15,9 @@ type wire_protocol_parser struct {
 
 func (parser *wire_protocol_parser) parse(command []byte) string {
 
-	cmd := parse_wire_command(command)
-	response := cmd.execute()
-	_ = response.encode()
+	//cmd := parse_wire_command(command)
+	//response := cmd.execute()
+	//_ = response.encode()
 
 	raw_response := parser.parse_command(command)
 	return encode_json(raw_response)

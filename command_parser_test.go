@@ -6,12 +6,14 @@ import (
 	"testing"
 )
 
-func Test_(t *testing.T) {
+func Test_command_parser_parses_begin_scenario_command(t *testing.T) {
+	testee := wire_command_parser{}
+
 	command_string := []byte(`["begin_scenario"]`)
+
+	command := testee.parse(command_string)
+
 	expected := &wire_command_begin_scenario{}
-
-	command := parse_wire_command(command_string)
-
-	assert.Equal(t, expected, command)
+	assert.IsType(t, expected, command)
 }
 

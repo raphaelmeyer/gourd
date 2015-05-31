@@ -19,7 +19,6 @@ func (cmd *generic_wire_command) execute() wire_response {
 	return &generic_wire_response{}
 }
 
-
 type wire_command_begin_scenario struct {
 }
 
@@ -27,10 +26,14 @@ func (command *wire_command_begin_scenario) execute() wire_response {
 	return &generic_wire_response{}
 }
 
-func parse_wire_command(command []byte) wire_command {
-	return &wire_command_begin_scenario{}
+type command_parser interface {
+	parse() wire_command
 }
 
+type wire_command_parser struct {
+}
 
-
+func (parser *wire_command_parser) parse(command []byte) wire_command {
+	return &wire_command_begin_scenario{}
+}
 
