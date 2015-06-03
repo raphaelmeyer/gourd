@@ -37,4 +37,3 @@ func Test_end_scenario_returns_success_response(t *testing.T) {
 	expected := &wire_response_success{}
 	assert.IsType(t, expected, response)
 }
-
