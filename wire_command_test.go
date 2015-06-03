@@ -27,3 +27,14 @@ func Test_begin_scenario_returns_success_response(t *testing.T) {
 	expected := &wire_response_success{}
 	assert.IsType(t, expected, response)
 }
+
+func Test_end_scenario_returns_success_response(t *testing.T) {
+	steps := &steps_mock{}
+	testee := &wire_command_end_scenario{}
+
+	response := testee.execute(steps)
+
+	expected := &wire_response_success{}
+	assert.IsType(t, expected, response)
+}
+

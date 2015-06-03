@@ -16,5 +16,5 @@ type wire_command_end_scenario struct {
 }
 
 func (command *wire_command_end_scenario) execute(steps steps) wire_response {
-	return &generic_wire_response{}
+	return &wire_response_success{}
 }
