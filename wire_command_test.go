@@ -1,15 +1,17 @@
 package gourd
 
 import (
-	"github.com/stretchr/testify/assert"
-	//"github.com/stretchr/testify/mock"
+	//"github.com/stretchr/testify/assert"
 	"testing"
 )
 
-func Test_RENAME_THIS(t *testing.T) {
+func Test_begin_scneario_notifies_the_steps(t *testing.T) {
+	steps := &steps_mock{}
 	testee := &wire_command_begin_scenario{}
 
-	testee.execute()
+	steps.On("begin_scenario").Return().Once()
 
-	assert.True(t, true)
+	testee.execute(steps)
+
+	steps.Mock.AssertExpectations(t)
 }
