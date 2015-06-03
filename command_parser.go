@@ -4,6 +4,10 @@ import (
 	"encoding/json"
 )
 
+type command_parser interface {
+	parse() wire_command
+}
+
 type wire_command_parser struct {
 }
 

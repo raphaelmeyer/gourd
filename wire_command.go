@@ -9,7 +9,7 @@ type wire_command_begin_scenario struct {
 
 func (command *wire_command_begin_scenario) execute(steps steps) wire_response {
 	steps.begin_scenario()
-	return &generic_wire_response{}
+	return &wire_response_success{}
 }
 
 type wire_command_end_scenario struct {
