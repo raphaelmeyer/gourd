@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func Test_command_parser_parses_begin_scenario_command(t *testing.T) {
+func Test_parsing_begin_scenario_returns_a_corresponding_command_object(t *testing.T) {
 	testee := wire_command_parser{}
 
 	command_string := []byte(`["begin_scenario"]`)
@@ -16,7 +16,7 @@ func Test_command_parser_parses_begin_scenario_command(t *testing.T) {
 	assert.IsType(t, expected, command)
 }
 
-func Test_command_parser_parses_end_scenario_command(t *testing.T) {
+func Test_parsing_end_scenario_command_returns_a_corresponding_command_object(t *testing.T) {
 	testee := wire_command_parser{}
 
 	command_string := []byte(`["end_scenario"]`)
@@ -27,7 +27,7 @@ func Test_command_parser_parses_end_scenario_command(t *testing.T) {
 	assert.IsType(t, expected, command)
 }
 
-func Test_command_parser_parses_step_matches_command(t *testing.T) {
+func Test_parsing_step_matches_returns_a_corresponding_command_object(t *testing.T) {
 	testee := wire_command_parser{}
 
 	command_string := []byte(`["step_matches",{"name_to_match":"some pattern"}]`)
