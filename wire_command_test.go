@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func Test_begin_scneario_notifies_the_steps(t *testing.T) {
+func Test_begin_scenario_notifies_steps(t *testing.T) {
 	steps := &steps_mock{}
 	testee := &wire_command_begin_scenario{}
 

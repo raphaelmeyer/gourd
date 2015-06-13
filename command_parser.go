@@ -23,6 +23,8 @@ func (parser *wire_command_parser) parse(command []byte) wire_command {
 		return &wire_command_begin_scenario{}
 	case "end_scenario":
 		return &wire_command_end_scenario{}
+	case "step_matches":
+		return &wire_command_step_matches{}
 	}
 
 	return nil
