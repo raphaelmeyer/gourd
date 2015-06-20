@@ -20,6 +20,7 @@ func (command *wire_command_end_scenario) execute(steps steps) wire_response {
 }
 
 type wire_command_step_matches struct {
+	name_to_match string
 }
 
 func (command *wire_command_step_matches) execute(steps steps) wire_response {

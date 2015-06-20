@@ -37,3 +37,14 @@ func Test_parsing_step_matches_returns_a_corresponding_command_object(t *testing
 	expected := &wire_command_step_matches{}
 	assert.IsType(t, expected, command)
 }
+
+func Test_step_name_to_match_is_stored_step_matches_command(t *testing.T) {
+	testee := wire_command_parser{}
+
+	pattern := "given pattern"
+	command_string := []byte(`["step_matches",{"name_to_match":"` + pattern + `"}]`)
+
+	command := testee.parse(command_string).(*wire_command_step_matches)
+
+	assert.Equal(t, pattern, command.name_to_match)
+}

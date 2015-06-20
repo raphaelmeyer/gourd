@@ -24,8 +24,19 @@ func (parser *wire_command_parser) parse(command []byte) wire_command {
 	case "end_scenario":
 		return &wire_command_end_scenario{}
 	case "step_matches":
-		return &wire_command_step_matches{}
+		return parse_step_matches(raw_command[1])
 	}
 
 	return nil
+}
+
+func parse_step_matches(raw_arguments json.RawMessage) wire_command {
+	type name_to_match struct {
+		Pattern string `json:"name_to_match"`
+	}
+
+	var arguments name_to_match
+	json.Unmarshal(raw_arguments, &arguments)
+
+	return &wire_command_step_matches{arguments.Pattern}
 }
